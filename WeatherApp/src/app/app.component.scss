@@ -1,0 +1,69 @@
+@import 'primeflex/primeflex.scss';
+$background-color:#FFFFFF;
+$left-size:13%;
+$right-width: 98%;
+$top-right-height: 45%;
+
+.all {
+  @extend .flex;
+  @extend .h-screen;
+  @extend .w-screen;
+  background-color: $background-color;
+  margin: 0;
+}
+
+.left {
+  height: 100%;
+  width: $left-size;
+}
+
+.right {
+  @extend .flex;
+  @extend .flex-column;
+  @extend .h-full;
+  width: 100-$left-size;
+}
+
+.bottom{
+    margin-left: 1%;
+    width: $right-width;
+    background-color: aqua;
+    height: 100-$top-right-height;
+}
+
+.top{
+    width: $right-width;
+    height: $top-right-height;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    border-radius: 10px;
+    padding: 6px 10px;
+    background-color: #f3f3f3; 
+    width: 37%;
+    height: 10%;
+    margin-top: 2%;
+    margin-left: 31.5%;
+  }
+  
+  .search-bar input {
+    border: none;
+    outline: none;
+    background: transparent;
+    flex: 1;
+    font-size: 16px;
+    color: #333;
+  }
+  
+  .search-bar input::placeholder {
+    color: #bbb; 
+  }
+  
+  .search-bar .material-icons {
+    color: orange;
+    font-size: 24px;
+    cursor: pointer;
+  }
+  
