@@ -1,0 +1,37 @@
+<div class="city-manager">
+  <div class="add-city-form">
+    <input
+      type="text"
+      [(ngModel)]="newCity"
+      placeholder="Search Here"
+      (keyup.enter)="addCity()"
+    >
+    <button (click)="addCity()">Add City</button>
+  </div>
+
+  @if (cities.length) {
+    <div class="carousel-container">
+      <button
+        class="nav-button left"
+        (click)="scrollLeft()"
+      >&lt;</button>
+
+      <button
+        class="nav-button right"
+        (click)="scrollRight()"
+      >&gt;</button>
+
+      <div class="city-carousel" #carousel (scroll)="updateScrollState()">
+        @for(city of cities; track city.name; let i = $index) {
+          <div class="city-card-wrapper">
+            <app-city-card
+              [cityName]="city.name"
+              [backgroundImage]="city.imageUrl"
+              (remove)="removeCity(i)">
+            </app-city-card>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

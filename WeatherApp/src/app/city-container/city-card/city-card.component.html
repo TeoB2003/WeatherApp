@@ -1,0 +1,7 @@
+<div class="city-card">
+  <div class="card-background" [style.backgroundImage]="'url(' + backgroundImage + ')'"></div>
+  <div class="card-content">
+    <h2 class="city-name">{{ cityName }}</h2>
+    <button class="remove-btn" (click)="onRemove()">×</button>
+  </div>
+</div>
