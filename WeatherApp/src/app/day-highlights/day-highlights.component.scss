@@ -1,0 +1,95 @@
+$bck: #EFEFEF;
+$left: 45%;
+.all{
+    height: 98%;
+    width: 100%;
+    //margin-left: 3%;
+    background-color: $bck;
+    border-radius: 10px;
+    display: flex;
+}
+
+.left{
+    height: 100%;
+    width: $left;
+    display: flex;
+}
+
+.city-info{
+    display: flex;
+    width: 94%;
+    margin-left: 3%;
+    height: 76%;
+    margin-top: 5%;
+}
+
+.chart-area{
+    height: 100%;
+    width: 100-$left;
+    background-color: antiquewhite;
+}
+
+.left-left-column{
+    height: 100%;
+    width: 30%;
+}
+
+.left-right-column{
+    height: 100%;
+    width: 64%;
+    margin-left: 3%;
+    display: flex;
+    flex-direction: column;
+}
+
+.temperature{
+    height: 37%;
+    width: 100%;
+    background-color: red;
+}
+
+.precipitation-probability
+{
+    margin-top: 3%;
+    height: 60%;
+    background-color: blue;
+}
+
+.precipitation{
+    height: 37%;
+    width: 100%;
+    background-color: yellow;
+}
+
+.other{
+    margin-top: 2%;
+    height: 60%;
+    width: 100%;
+    display: flex;
+
+    .left{
+        width: 48%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+
+        .visibility{
+            height: 48%;
+            width: 100%;
+            background-color: aquamarine;
+        }
+
+        .uv{
+            margin-top: 5%;
+            height: 48%;
+            width: 100%;
+            background-color: aquamarine;
+        }
+    }
+
+    .right{
+        width:  48%;
+        margin-left: 4%;
+        background-color: black;
+    }
+}
