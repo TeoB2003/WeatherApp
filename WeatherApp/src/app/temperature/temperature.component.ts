@@ -1,11 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
+import { CardModule } from 'primeng/card'; 
 
 @Component({
   selector: 'app-temperature',
-  imports: [],
+  imports: [CardModule],
   templateUrl: './temperature.component.html',
   styleUrl: './temperature.component.scss'
 })
 export class TemperatureComponent {
+  temperature=input(0)
 
 }

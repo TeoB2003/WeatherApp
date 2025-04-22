@@ -8,6 +8,7 @@ import { routes } from './app.routes';
 
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
+import { provideHttpClient } from '@angular/common/http';
 
 const firebaseConfig = {
   apiKey: "AIzaSyC0-vH_OegDCVpa8myPbIvEWflW-zRgF6U",
@@ -28,5 +29,5 @@ export const appConfig: ApplicationConfig = {
         theme: {
             preset: Aura
         }
-    })]
+    }), provideHttpClient()]
 };

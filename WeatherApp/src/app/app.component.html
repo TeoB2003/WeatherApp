@@ -1,17 +1,6 @@
-<div class="all">
- <div class="left">
-    <app-left-panel></app-left-panel>
-  </div>
-  <div class="right">
-      <div class="top">
-        <div class="search-bar">
-          <input type="text" placeholder="Search here..." />
-          <span class="material-icons">search</span>
-        </div>
-      </div>
-
-      <div class="bottom">
-        <app-day-highlights></app-day-highlights>
-      </div>
-  </div>
-</div>
+@if(shouldShowButtons())
+{
+<button (click)="goToCity('madrid')">=Madrid</button>
+<button (click)="goToCity('bucharest')">București</button>
+}
+<router-outlet></router-outlet>
