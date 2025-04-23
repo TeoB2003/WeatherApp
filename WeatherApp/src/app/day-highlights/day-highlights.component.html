@@ -1,4 +1,7 @@
 <div class="all">
+    <div class="title">
+        <p style="color:#636363; font-size: 1.1em; font-weight: bold; ">Today's highlight</p>
+    </div>
     <div class="city-info">
     <div class="left">
         <div class="left-left-column">
@@ -6,7 +9,8 @@
                 <app-temperature [temperature]="temperature"></app-temperature>
             </div>
 
-            <div class="precipitation-probability"> Precip component
+            <div class="precipitation-probability"> 
+                <app-precipitation-probability [probabiliy]="probability"></app-precipitation-probability>
             </div>
         </div>
         <div class="left-right-column">

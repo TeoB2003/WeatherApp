@@ -2,10 +2,11 @@ import { Component, inject, input } from '@angular/core';
 import { TemperatureComponent } from "../temperature/temperature.component";
 import { WeatherService } from '../shared/service/weatherService';
 import { ActivatedRoute } from '@angular/router';
+import { PrecipitationProbabilityComponent } from "../precipitation-probability/precipitation-probability.component";
 
 @Component({
   selector: 'app-day-highlights',
-  imports: [TemperatureComponent],
+  imports: [TemperatureComponent, PrecipitationProbabilityComponent],
   templateUrl: './day-highlights.component.html',
   styleUrl: './day-highlights.component.scss'
 })
@@ -15,6 +16,7 @@ export class DayHighlightsComponent {
     city= input<string>("");
 
     temperature=0
+    probability=0
   ngOnInit(): void {
 
     if (this.city) {

@@ -7,8 +7,14 @@ $left: 45%;
     background-color: $bck;
     border-radius: 10px;
     display: flex;
+    flex-direction: column;
 }
-
+.title{
+    height: 19%;
+    margin-left: 3%;
+    display: flex;
+    align-items: center;
+}
 .left{
     height: 100%;
     width: $left;
@@ -20,7 +26,6 @@ $left: 45%;
     width: 94%;
     margin-left: 3%;
     height: 76%;
-    margin-top: 5%;
 }
 
 .chart-area{
@@ -45,14 +50,12 @@ $left: 45%;
 .temperature{
     height: 37%;
     width: 100%;
-    background-color: red;
 }
 
 .precipitation-probability
 {
     margin-top: 3%;
-    height: 60%;
-    background-color: blue;
+    height: 61%;
 }
 
 .precipitation{
@@ -63,7 +66,7 @@ $left: 45%;
 
 .other{
     margin-top: 2%;
-    height: 60%;
+    height: 61%;
     width: 100%;
     display: flex;
 
