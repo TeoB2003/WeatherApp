@@ -1,60 +1,66 @@
-import { Component,  ViewChild, ElementRef  } from '@angular/core';
+import { Component} from '@angular/core';
 import { CityCardComponent } from './city-card/city-card.component';
-import { CityImageService } from './city-image.service';
+import { CityService } from './city.service';
 import { FormsModule } from '@angular/forms';
-
-interface CityCard {
-  name: string;
-  imageUrl: string;
-}
-
+import { CarouselModule } from 'primeng/carousel';
+import { Observable } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { CityCard } from './city-card.interface';
 
 @Component({
   selector: 'app-city-container',
-  imports: [CityCardComponent, FormsModule],
+  imports: [CityCardComponent, FormsModule, CarouselModule, CommonModule],
   templateUrl: './city-container.component.html',
   styleUrl: './city-container.component.scss'
 })
 export class CityContainerComponent {
   cities: CityCard[] = [];
-  newCity = '';
-  @ViewChild('carousel') carousel!: ElementRef;
+  cities$: Observable<CityCard[]> | undefined;
+  newCity: string = '';
 
-  constructor(private cityImageService: CityImageService) {}
+  responsiveOptions = [
+    {
+      breakpoint: '1024px',
+      numVisible: 2,
+      numScroll: 1
+    },
+    {
+      breakpoint: '768px',
+      numVisible: 1,
+      numScroll: 1
+    }
+  ];
+
+
+  constructor(private cityService: CityService) {}
+
+  ngOnInit(): void {
+    this.cityService.cities$.subscribe(cities => {
+      this.cities = [...cities];
+    });
+  }
 
   addCity(): void {
-    if (this.newCity.trim()) {
-      const cityName = this.newCity.trim();
-      const cityCard: CityCard = {
-        name: cityName,
-        imageUrl: this.cityImageService.getCityImage()
-      };
-
-      this.cities.push(cityCard);
+    const trimmedName = this.newCity.trim();
+    if (trimmedName) {
+      const imageUrl = this.cityService.getCityImage();
+      this.cityService.addCity(trimmedName, imageUrl);
       this.newCity = '';
     }
   }
 
-  removeCity(index: number): void {
-    this.cities.splice(index, 1);
+  removeCity(id: string): void {
+    this.cityService.removeCity(id);
+    this.cities$?.forEach(cities => {console.log(cities)});
   }
 
-  scrollLeft() {
-    this.carousel.nativeElement.scrollBy({
-      left: -300,
-      behavior: 'smooth'
-    });
-  }
 
-  scrollRight() {
-    this.carousel.nativeElement.scrollBy({
-      left: 300,
-      behavior: 'smooth'
-    });
-  }
-
-  updateScrollState() {
-    const element = this.carousel.nativeElement;
-    const threshold = 5;
+  editCity(index: number, newName: string): void {
+    const cities = this.cityService.getCities();
+    const updatedCity = {
+      ...cities[index],
+      name: newName
+    };
+    this.cityService.updateCity(index, updatedCity);
   }
 }

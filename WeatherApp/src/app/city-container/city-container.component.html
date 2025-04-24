@@ -5,33 +5,32 @@
       [(ngModel)]="newCity"
       placeholder="Search Here"
       (keyup.enter)="addCity()"
-    >
+    />
     <button (click)="addCity()">Add City</button>
   </div>
 
-  @if (cities.length) {
-    <div class="carousel-container">
-      <button
-        class="nav-button left"
-        (click)="scrollLeft()"
-      >&lt;</button>
+  <p-carousel
+  [value]="cities"
+  [numVisible]="3"
+  [numScroll]="1"
+  [circular]="true"
+  [responsiveOptions]="responsiveOptions"
+  >
 
-      <button
-        class="nav-button right"
-        (click)="scrollRight()"
-      >&gt;</button>
-
-      <div class="city-carousel" #carousel (scroll)="updateScrollState()">
-        @for(city of cities; track city.name; let i = $index) {
-          <div class="city-card-wrapper">
-            <app-city-card
-              [cityName]="city.name"
-              [backgroundImage]="city.imageUrl"
-              (remove)="removeCity(i)">
-            </app-city-card>
-          </div>
-        }
-      </div>
+  <ng-template pTemplate="header">
+    <div class="city-carousel-header">
+      <h2>City List</h2>
     </div>
-  }
+  </ng-template>
+
+  <ng-template let-city pTemplate="item">
+    <app-city-card
+      [city]="city"
+      (remove)="removeCity(city.id)">
+    </app-city-card>
+  </ng-template>
+</p-carousel>
+
+<div *ngIf="cities.length === 0">No cities available.</div>
+
 </div>

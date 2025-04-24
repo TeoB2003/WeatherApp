@@ -1,0 +1,43 @@
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { BehaviorSubject, Observable } from "rxjs";
+import {CityCard} from "../city-container/city-card.interface";
+
+@Injectable({providedIn: 'root'})
+export class CityService {
+  private readonly URL = 'https://images.unsplash.com/photo-1507961455425-0caef37ef6fe?q=80&w=2408&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
+  private citiesSubject = new BehaviorSubject<CityCard[]>([]);
+  cities$: Observable<CityCard[]> = this.citiesSubject.asObservable();
+
+  constructor(private http: HttpClient) {}
+
+  getCities(): CityCard[] {
+    return this.citiesSubject.getValue();
+  }
+
+  addCity(name: string, imageUrl: string): void {
+    const newCity: CityCard = {
+      id: crypto.randomUUID(),
+      name,
+      imageUrl
+    };
+
+    const updated = [...this.getCities(), newCity];
+    this.citiesSubject.next(updated);
+  }
+  updateCity(index: number, updatedCity: CityCard): void {
+    const cities = [...this.getCities()];
+    cities[index] = updatedCity;
+    this.citiesSubject.next(cities);
+  }
+
+  removeCity(id: string): void {
+    const updated = this.getCities().filter(city => city.id !== id);
+    this.citiesSubject.next(updated);
+  }
+
+
+  getCityImage(): string {
+    return this.URL;
+  }
+}
