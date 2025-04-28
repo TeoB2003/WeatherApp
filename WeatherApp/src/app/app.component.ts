@@ -1,8 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
-import { LeftPanelComponent } from "./left-panel/left-panel.component";
 import { DayHighlightsComponent } from "./day-highlights/day-highlights.component";
+import { CityContainerComponent } from './city-container/city-container.component';
+
 
 @Component({
     selector: 'app-root',

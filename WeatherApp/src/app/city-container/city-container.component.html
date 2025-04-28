@@ -1,0 +1,36 @@
+<div class="city-manager">
+  <div class="add-city-form">
+    <input
+      type="text"
+      [(ngModel)]="newCity"
+      placeholder="Search Here"
+      (keyup.enter)="addCity()"
+    />
+    <button (click)="addCity()">Add City</button>
+  </div>
+
+  <p-carousel
+  [value]="cities"
+  [numVisible]="3"
+  [numScroll]="1"
+  [circular]="true"
+  [responsiveOptions]="responsiveOptions"
+  >
+
+  <ng-template pTemplate="header">
+    <div class="city-carousel-header">
+      <h2>City List</h2>
+    </div>
+  </ng-template>
+
+  <ng-template let-city pTemplate="item">
+    <app-city-card
+      [city]="city"
+      (remove)="removeCity(city.id)">
+    </app-city-card>
+  </ng-template>
+</p-carousel>
+
+<div *ngIf="cities.length === 0">No cities available.</div>
+
+</div>
