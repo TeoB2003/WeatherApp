@@ -8,6 +8,6 @@ import { CardModule } from 'primeng/card';
   styleUrl: './temperature.component.scss'
 })
 export class TemperatureComponent {
-  temperature=input(0)
+ 
 
 }

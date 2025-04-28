@@ -6,11 +6,11 @@
     <div class="left">
         <div class="left-left-column">
             <div class="temperature">
-                <app-temperature [temperature]="temperature"></app-temperature>
+                <app-apparent-temperature [temperature]="weatherData.apparentTemperature"></app-apparent-temperature>
             </div>
 
             <div class="precipitation-probability"> 
-                <app-precipitation-probability [probabiliy]="probability"></app-precipitation-probability>
+                <app-precipitation-probability [probabiliy]="weatherData.maxPrecipitationProbabilityToday.prob"></app-precipitation-probability>
             </div>
         </div>
         <div class="left-right-column">
@@ -20,7 +20,9 @@
                     <div class="visibility"></div>
                     <div class="uv"></div>
                 </div>
-                <div class="right"></div>
+                <div class="right">
+                    <app-temperature ></app-temperature>
+                </div>
             </div>
         </div>
     </div>

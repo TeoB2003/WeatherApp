@@ -3,33 +3,21 @@ import { TemperatureComponent } from "../temperature/temperature.component";
 import { WeatherService } from '../shared/service/weatherService';
 import { ActivatedRoute } from '@angular/router';
 import { PrecipitationProbabilityComponent } from "../precipitation-probability/precipitation-probability.component";
+import { ApparentTemperatureComponent } from "../apparent-temperature/apparent-temperature.component";
+import { WeatherData } from '../shared/model/weatherData';
 
 @Component({
   selector: 'app-day-highlights',
-  imports: [TemperatureComponent, PrecipitationProbabilityComponent],
+  imports: [TemperatureComponent, PrecipitationProbabilityComponent, ApparentTemperatureComponent],
   templateUrl: './day-highlights.component.html',
   styleUrl: './day-highlights.component.scss'
 })
 export class DayHighlightsComponent {
     dataService=inject(WeatherService);
-
+    weatherData!:WeatherData
     city= input<string>("");
 
-    temperature=0
-    probability=0
-  ngOnInit(): void {
-
-    if (this.city) {
-      this.dataService.getWeatherByCity(this.city()).subscribe({
-        next: (data) => {
-          console.log('meteo data:', data);
-          this.temperature=data.current_weather.temperature
-          console.log(this.temperature)
-        },
-        error: (err) => {
-          console.error('fetch error:', err.message);
-        }
-      });
-    }
+  async ngOnInit(): Promise<void> {
+      this.weatherData=await this.dataService.getWeatherByCity('')
   }
 }
