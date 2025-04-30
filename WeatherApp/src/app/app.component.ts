@@ -14,11 +14,9 @@ import { CityContainerComponent } from './city-container/city-container.componen
 export class AppComponent {
   title = 'WeatherApp';
   router=inject(Router)
-  goToCity(city: string): void {
-    this.router.navigate(['/weather', city]);
-  }
 
-  shouldShowButtons(): boolean {
-    return this.router.url === '/';
+  ngOnInit()
+  {
+    this.router.navigate(['/weather', 'bucharest']);
   }
 }

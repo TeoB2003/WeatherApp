@@ -1,6 +1,6 @@
 <div class="all">
     <div class="title">
-        <p style="color:#636363; font-size: 1.1em; font-weight: bold; ">Today's highlight</p>
+        <p style="color:#636363; font-size: 1.1em; font-weight: bold; ">Today's highlight in {{city()}}</p>
     </div>
     <div class="city-info">
     <div class="left">
@@ -14,14 +14,18 @@
             </div>
         </div>
         <div class="left-right-column">
-            <div class="precipitation"></div>
+            <div class="precipitation"><app-precipitations></app-precipitations></div>
             <div class="other">
                 <div class="left">
-                    <div class="visibility"></div>
-                    <div class="uv"></div>
+                    <div class="visibility">
+                        <app-visibility [visibility]="weatherData.visibilityNow"></app-visibility>
+                    </div>
+                    <div class="uv">
+                        <app-uv></app-uv>
+                    </div>
                 </div>
                 <div class="right">
-                    <app-temperature ></app-temperature>
+                    <app-temperature [maxT]="weatherData.maxTemperatureToday" [minT]="weatherData.minTemperatureToday" ></app-temperature>
                 </div>
             </div>
         </div>
