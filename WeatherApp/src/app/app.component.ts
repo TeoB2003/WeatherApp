@@ -1,22 +1,21 @@
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
-import { DayHighlightsComponent } from "./day-highlights/day-highlights.component";
+import { DayHighlightsComponent } from './day-highlights/day-highlights.component';
 import { CityContainerComponent } from './city-container/city-container.component';
-
+import { CommonModule } from '@angular/common';
 
 @Component({
-    selector: 'app-root',
-    imports: [RouterOutlet, ButtonModule],
-    templateUrl: './app.component.html',
-    styleUrl: './app.component.scss'
+  selector: 'app-root',
+  imports: [RouterOutlet, ButtonModule, CommonModule],
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.scss',
 })
 export class AppComponent {
   title = 'WeatherApp';
-  router=inject(Router)
+  router = inject(Router);
 
-  ngOnInit()
-  {
+  ngOnInit() {
     this.router.navigate(['/weather', 'bucharest']);
   }
 }

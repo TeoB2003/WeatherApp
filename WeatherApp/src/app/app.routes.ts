@@ -7,5 +7,6 @@ import { WeatherForLocationComponent } from './weather-for-location/weather-for-
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'weather/:cityName',component:WeatherForLocationComponent  },
+  { path: 'weather/:cityName', component: WeatherForLocationComponent },
+  { path: '**', redirectTo: 'login' }
 ];
