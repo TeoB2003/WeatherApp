@@ -67,3 +67,19 @@ $top-right-height: 45%;
     cursor: pointer;
   }
   
+
+  @media screen and (max-width: 768px) {
+    .all{
+      flex-direction: column;
+    }
+
+    .left{
+      height: 10%;
+      width: 100%;
+    }
+
+    .right{
+      height: 90%;
+      width: 90%;
+    }
+  }

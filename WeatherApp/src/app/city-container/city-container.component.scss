@@ -1,21 +1,35 @@
-.add-city-form {
+.search-bar {
   display: flex;
-  gap: 1rem;
-  max-width: 500px;
-  width: 100%;
-  margin: 2rem auto;
-  justify-content: center;
   align-items: center;
+  border-radius: 10px;
+  padding: 6px 10px;
+  background-color: #f3f3f3; 
+  width: 37%;
+  height: 10%;
+  margin-top: 2%;
+  margin-left: 31.5%;
+  margin-bottom: 1%;
 }
 
-.add-city-form input {
-  padding: 0.8rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  flex-grow: 1;
-  max-width: 300px;
-  font-size: 1rem;
+.search-bar input {
+  border: none;
+  outline: none;
+  background: transparent;
+  flex: 1;
+  font-size: 16px;
+  color: #333;
 }
+
+.search-bar input::placeholder {
+  color: #bbb; 
+}
+
+.search-bar .material-icons {
+  color: orange;
+  font-size: 24px;
+  cursor: pointer;
+}
+
 
 .add-city-form button {
   padding: 0.8rem 1.5rem;
@@ -35,8 +49,6 @@
 
 .city-manager {
   height: 100%;
-  //background-color: red;
-  margin-top: 0;
 }
 
 .city-carousel-header {

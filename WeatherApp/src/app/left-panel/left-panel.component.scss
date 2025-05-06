@@ -1,8 +1,12 @@
+@import 'primeflex/primeflex.scss';
+
 .left-panel {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 100vh;
+  height: 98%;
+  margin-top: 1vh;
+  margin-left: 5%;
   background-color: #efefef;
   padding: 1.5rem 1rem;
   border-radius: 1.25rem;
@@ -17,7 +21,7 @@
   .bottom-section {
     display: flex;
     justify-content: center;
-    padding-bottom: 1rem;
+    background-color: aqua;
   }
 
   .hello-user-btn {
@@ -43,5 +47,19 @@
       height: 24px;
       border-radius: 9999px;
     }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .left-panel{
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+    margin:0;
+    border-radius: 0;
+  }
+
+  .bottom-section{
+     display: none;
   }
 }

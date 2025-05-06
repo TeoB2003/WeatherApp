@@ -1,12 +1,12 @@
 <div class="city-manager">
-  <div class="add-city-form">
+  <div class="search-bar">
     <input
       type="text"
+      placeholder="Search here..."
       [(ngModel)]="newCity"
-      placeholder="Search Here"
       (keyup.enter)="addCity()"
     />
-    <button (click)="addCity()">Add City</button>
+    <span class="material-icons" (click)="addCity()">search</span>
   </div>
 
   <p-carousel
