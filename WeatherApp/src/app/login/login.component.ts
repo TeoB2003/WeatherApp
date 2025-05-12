@@ -1,37 +1,29 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../auth.service';
-import { FormsModule } from '@angular/forms';
+import { Auth, signInWithEmailAndPassword } from '@angular/fire/auth';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
+  standalone: true,
   selector: 'app-login',
+  imports: [CommonModule, FormsModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
-  standalone: true,
-  imports: [FormsModule, CommonModule],
 })
 export class LoginComponent {
-  email: string = '';
-  password: string = '';
-  errorMessage: string | null = null;
+  email = '';
+  password = '';
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private auth: Auth, private router: Router) {}
 
-  async login() {
-    this.errorMessage = null;
-
-    try {
-      const error = await this.authService.login(this.email, this.password);
-      if (error) {
-        this.errorMessage = error;
-      }
-    } catch (error) {
-      this.errorMessage = 'A apărut o eroare neașteptată. Încearcă din nou!';
-    }
-  }
-
-  navigateToRegister() {
-    this.router.navigate(['/register']);
+  onLogin() {
+    signInWithEmailAndPassword(this.auth, this.email, this.password)
+      .then(() => {
+        this.router.navigate(['/weather/bucharest']);
+      })
+      .catch((err) => {
+        alert('Login failed: ' + err.message);
+      });
   }
 }

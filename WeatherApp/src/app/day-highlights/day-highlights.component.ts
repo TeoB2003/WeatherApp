@@ -5,10 +5,13 @@ import { ActivatedRoute } from '@angular/router';
 import { PrecipitationProbabilityComponent } from "../precipitation-probability/precipitation-probability.component";
 import { ApparentTemperatureComponent } from "../apparent-temperature/apparent-temperature.component";
 import { WeatherData } from '../shared/model/weatherData';
+import { VisibilityComponent } from "../visibility/visibility.component";
+import { UvComponent } from "../uv/uv.component";
+import { PrecipitationsComponent } from "../precipitations/precipitations.component";
 
 @Component({
   selector: 'app-day-highlights',
-  imports: [TemperatureComponent, PrecipitationProbabilityComponent, ApparentTemperatureComponent],
+  imports: [TemperatureComponent, PrecipitationProbabilityComponent, ApparentTemperatureComponent, VisibilityComponent, UvComponent, PrecipitationsComponent],
   templateUrl: './day-highlights.component.html',
   styleUrl: './day-highlights.component.scss'
 })
@@ -19,5 +22,6 @@ export class DayHighlightsComponent {
 
   async ngOnInit(): Promise<void> {
       this.weatherData=await this.dataService.getWeatherByCity('')
+      console.log(this.weatherData)
   }
 }

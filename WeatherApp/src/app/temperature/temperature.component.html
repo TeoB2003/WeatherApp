@@ -1,6 +1,13 @@
 <p-card header="Temperature" [style]="{ width: '100%', height:'100%', background: '#c9c9c9' }">
     <div class="temperature-container">
-      <h2></h2>
+      
+        <span class="material-icons">ac_unit</span>
+        <span>Min: <strong style="color: #2196f3;">{{ minT() | number: '1.2-2' }} </strong>°C</span>
+
+
+        <span class="material-icons">wb_sunny</span>
+        <span>Max: <strong style="color: #ff5722;">{{ maxT() | number: '1.2-2' }} </strong> °C</span>
+
     </div>
   </p-card>
   
