@@ -22,5 +22,6 @@ export class DayHighlightsComponent {
 
   async ngOnInit(): Promise<void> {
       this.weatherData=await this.dataService.getWeatherByCity('')
+      console.log(this.weatherData)
   }
 }
