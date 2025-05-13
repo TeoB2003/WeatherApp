@@ -13,5 +13,6 @@ export interface WeatherData{
         snowfall:number,
         rain: number,
         showers:number
-    }
+    },
+    precipitationNow: number
 }

@@ -4,8 +4,10 @@ import {
   ViewChild,
   ElementRef,
   NgZone,
+  inject,
 } from '@angular/core';
 import { CityService } from '../city.service';
+import { WeatherService } from '../../shared/service/weatherService';
 
 declare const google: any;
 
@@ -20,8 +22,10 @@ export class CitySearchBarComponent implements AfterViewInit {
   selectedCityName: string = '';
   selectedLat: number = 0;
   selectedLng: number = 0;
+  weatherService=inject(WeatherService)
 
   constructor(private ngZone: NgZone, private cityService: CityService) {}
+
 
   ngAfterViewInit(): void {
     const autocomplete = new google.maps.places.Autocomplete(
@@ -57,5 +61,13 @@ export class CitySearchBarComponent implements AfterViewInit {
       this.selectedLat = 0;
       this.selectedLng = 0;
     }
+  }
+  searchCity()
+  {
+    this.weatherService.changeCity({
+       name:this.selectedCityName,
+        lat: this.selectedLat,
+        lng: this.selectedLng
+    })
   }
 }

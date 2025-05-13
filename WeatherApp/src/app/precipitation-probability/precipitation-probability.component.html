@@ -1,5 +1,7 @@
 <p-card header="Precipitation probability" [style]="{ width: '100%', height:'100%', background: '#c9c9c9' }">
     <div class="precipitation">
-      <h2>{{ probabiliy() }} %</h2>
+      <h2>Now: {{probabilityNow()}} %</h2>
+      <h3>Max: {{ maxProbabiliy() }} % at {{maxHour()}}: 00</h3>
+
     </div>
   </p-card>

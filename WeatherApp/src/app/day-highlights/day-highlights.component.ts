@@ -1,4 +1,4 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, inject, input, SimpleChanges } from '@angular/core';
 import { TemperatureComponent } from "../temperature/temperature.component";
 import { WeatherService } from '../shared/service/weatherService';
 import { ActivatedRoute } from '@angular/router';
@@ -21,7 +21,17 @@ export class DayHighlightsComponent {
     city= input<string>("");
 
   async ngOnInit(): Promise<void> {
-      this.weatherData=await this.dataService.getWeatherByCity('')
+      this.weatherData=await this.dataService.getWeatherByCity()
       console.log(this.weatherData)
+  }
+
+  async ngOnChanges(changes: SimpleChanges): Promise<void> {
+      console.log(this.city())
+      await this.fetchWeatherData();
+  }
+
+  private async fetchWeatherData(): Promise<void> {
+      this.weatherData = await this.dataService.getWeatherByCity();
+      console.log(this.weatherData);
   }
 }

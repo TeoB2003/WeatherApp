@@ -3,6 +3,8 @@ import { ButtonModule } from 'primeng/button';
 import { LeftPanelComponent } from "../left-panel/left-panel.component";
 import { DayHighlightsComponent } from "../day-highlights/day-highlights.component";
 import { CityContainerComponent } from '../city-container/city-container.component';
+import { WeatherService } from '../shared/service/weatherService';
+import { city } from '../shared/model/city';
 @Component({
   selector: 'app-weather-for-location',
   imports: [ButtonModule, LeftPanelComponent, DayHighlightsComponent, CityContainerComponent],
@@ -10,7 +12,11 @@ import { CityContainerComponent } from '../city-container/city-container.compone
   styleUrl: './weather-for-location.component.scss'
 })
 export class WeatherForLocationComponent {
-  city:string = "Bucharest";
+  weatherService=inject(WeatherService)
+  city:string = this.weatherService.currentCity.name;
   ngOnInit(): void {
+    this.weatherService.currentCity$.subscribe((city: city) => {
+      this.city = city.name;
+    });
     }
 }
