@@ -15,8 +15,8 @@ export class CityService {
     return this.citiesSubject.getValue();
   }
 
-  addCity(name: string, lat: number, lng: number): void {
-    const imageUrl: string = this.getCityImage();
+  addCity(name: string, lat: number, lng: number, imageUrl:string): void {
+    //const imageUrl: string = this.getCityImage();
     const newCity: CityCard = {
       id: crypto.randomUUID(),
       name,

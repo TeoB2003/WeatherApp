@@ -22,9 +22,11 @@ export class CitySearchBarComponent implements AfterViewInit {
   selectedCityName: string = '';
   selectedLat: number = 0;
   selectedLng: number = 0;
-  weatherService=inject(WeatherService)
+  imageURL: string = ''
 
-  constructor(private ngZone: NgZone, private cityService: CityService) {}
+  weatherService = inject(WeatherService)
+
+  constructor(private ngZone: NgZone, private cityService: CityService) { }
 
 
   ngAfterViewInit(): void {
@@ -44,16 +46,26 @@ export class CitySearchBarComponent implements AfterViewInit {
           this.selectedLat = place.geometry.location.lat();
           this.selectedLng = place.geometry.location.lng();
         }
+
+        if (place.photos) {
+          const photo = place.photos[1];
+          const photoUrl = photo.getUrl({ maxWidth: 700, maxHeight: 400 });  
+          //console.log(photoUrl);
+          this.imageURL=photoUrl
+        }
       });
     });
+
   }
 
   addCity(): void {
+    console.log(this.imageURL)
     if (this.selectedCityName && this.selectedLat && this.selectedLng) {
       this.cityService.addCity(
         this.selectedCityName,
         this.selectedLat,
-        this.selectedLng
+        this.selectedLng,
+        this.imageURL
       );
 
       this.searchBox.nativeElement.value = '';
@@ -62,12 +74,11 @@ export class CitySearchBarComponent implements AfterViewInit {
       this.selectedLng = 0;
     }
   }
-  searchCity()
-  {
+  searchCity() {
     this.weatherService.changeCity({
-       name:this.selectedCityName,
-        lat: this.selectedLat,
-        lng: this.selectedLng
+      name: this.selectedCityName,
+      lat: this.selectedLat,
+      lng: this.selectedLng
     })
   }
 }
