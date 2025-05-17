@@ -53,7 +53,8 @@
 
   .register-text {
     margin-top: 1rem;
-    font-size: 0.9rem;
+    font-size: 1rem;
+    color: black;
 
     a {
       color: #3182ce;
@@ -63,5 +64,8 @@
         text-decoration: underline;
       }
     }
+  }
+  header {
+    background-color: #f1f1f1 !important;
   }
 }

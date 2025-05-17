@@ -26,4 +26,7 @@ export class LoginComponent {
         alert('Login failed: ' + err.message);
       });
   }
+  goToRegister() {
+    this.router.navigate(['/register']);
+  }
 }

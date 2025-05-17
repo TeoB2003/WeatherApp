@@ -24,14 +24,14 @@ export class RegisterComponent {
       if (error) {
         this.errorMessage = error;
       } else {
-        this.router.navigate(['/budget']);
+        this.router.navigate(['/weather/bucharest']);
       }
     } catch (error) {
       this.errorMessage = 'There was an error registering. Please try again!';
     }
   }
 
-  navigateToLogin() {
+  goToLogin() {
     this.router.navigate(['/login']);
   }
 }
