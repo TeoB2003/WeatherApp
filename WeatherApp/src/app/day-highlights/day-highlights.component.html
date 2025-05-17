@@ -10,18 +10,18 @@
             </div>
 
             <div class="precipitation-probability"> 
-                <app-precipitation-probability [probabiliy]="weatherData.maxPrecipitationProbabilityToday.prob"></app-precipitation-probability>
+                <app-precipitation-probability [maxProbabiliy]="weatherData.maxPrecipitationProbabilityToday.prob" [maxHour]="weatherData.maxPrecipitationProbabilityToday.hour" [probabilityNow]="weatherData.precipitationNow"></app-precipitation-probability>
             </div>
         </div>
         <div class="left-right-column">
-            <div class="precipitation"><app-precipitations></app-precipitations></div>
+            <div class="precipitation"><app-precipitations [precipitations]="weatherData.precipitation"></app-precipitations></div>
             <div class="other">
                 <div class="left">
                     <div class="visibility">
                         <app-visibility [visibility]="weatherData.visibilityNow"></app-visibility>
                     </div>
                     <div class="uv">
-                        <app-uv></app-uv>
+                        <app-uv [uv]="weatherData.UVIndex" ></app-uv>
                     </div>
                 </div>
                 <div class="right">

@@ -7,5 +7,5 @@ import { CardModule } from 'primeng/card';
   styleUrl: './visibility.component.scss'
 })
 export class VisibilityComponent {
-  visibility=input(0)
+  visibility=input<number>()
 }

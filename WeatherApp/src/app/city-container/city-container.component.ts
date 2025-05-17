@@ -1,15 +1,15 @@
-import { Component} from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { CityCardComponent } from './city-card/city-card.component';
 import { CityService } from './city.service';
 import { FormsModule } from '@angular/forms';
-import { CarouselModule } from 'primeng/carousel';
 import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { CityCard } from './city-card.interface';
+import { CitySearchBarComponent } from './city-search-bar/city-search-bar.component';
 
 @Component({
   selector: 'app-city-container',
-  imports: [CityCardComponent, FormsModule, CarouselModule, CommonModule],
+  imports: [CityCardComponent, FormsModule, CommonModule, CitySearchBarComponent],
   templateUrl: './city-container.component.html',
   styleUrl: './city-container.component.scss'
 })
@@ -18,18 +18,10 @@ export class CityContainerComponent {
   cities$: Observable<CityCard[]> | undefined;
   newCity: string = '';
 
-  responsiveOptions = [
-    {
-      breakpoint: '1024px',
-      numVisible: 2,
-      numScroll: 1
-    },
-    {
-      breakpoint: '768px',
-      numVisible: 1,
-      numScroll: 1
-    }
-  ];
+  currentIndex = 0;
+  visibleItems = 3;
+  maxIndex = 0;
+
 
 
   constructor(private cityService: CityService) {}
@@ -37,23 +29,45 @@ export class CityContainerComponent {
   ngOnInit(): void {
     this.cityService.cities$.subscribe(cities => {
       this.cities = [...cities];
+      this.calculateMaxIndex();
     });
+    this.updateVisibleItems();
+  }
+  @HostListener('window:resize')
+  onResize() {
+    this.updateVisibleItems();
   }
 
-  addCity(): void {
-    const trimmedName = this.newCity.trim();
-    if (trimmedName) {
-      const imageUrl = this.cityService.getCityImage();
-      this.cityService.addCity(trimmedName, imageUrl);
-      this.newCity = '';
-    }
+  updateVisibleItems() {
+    const width = window.innerWidth;
+    this.visibleItems = width >= 1024 ? 3 : width >= 768 ? 2 : 1;
+    this.calculateMaxIndex();
   }
+
+  calculateMaxIndex() {
+    this.maxIndex = Math.max(0, this.cities.length - this.visibleItems);
+  }
+
+  get transformValue() {
+    const percentage = (100 / this.visibleItems) * this.currentIndex;
+    return `translateX(-${percentage}%)`;
+  }
+
+  prev() {
+    this.currentIndex = Math.max(0, this.currentIndex - 1);
+  }
+
+  next() {
+    this.currentIndex = Math.min(this.maxIndex, this.currentIndex + 1);
+  }
+
 
   removeCity(id: string): void {
     this.cityService.removeCity(id);
-    this.cities$?.forEach(cities => {console.log(cities)});
+    this.cities$?.forEach(cities => { console.log(cities) });
+    this.calculateMaxIndex();
+    this.currentIndex = Math.min(this.currentIndex, this.maxIndex);
   }
-
 
   editCity(index: number, newName: string): void {
     const cities = this.cityService.getCities();

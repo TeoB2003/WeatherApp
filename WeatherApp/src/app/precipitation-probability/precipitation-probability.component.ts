@@ -8,5 +8,7 @@ import { CardModule } from 'primeng/card';
   styleUrl: './precipitation-probability.component.scss'
 })
 export class PrecipitationProbabilityComponent {
-  probabiliy=input(0);
+  maxProbabiliy=input(0);
+  maxHour=input(0)
+  probabilityNow=input(0)
 }

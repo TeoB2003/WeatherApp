@@ -1,0 +1,36 @@
+.add-city-form {
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+  padding: 6px 10px;
+  background-color: #f3f3f3;
+  width: 37%;
+  height: 10%;
+  margin-top: 2%;
+  margin-left: 31.5%;
+  margin-bottom: 2%;
+}
+
+.add-city-form input {
+  border: none;
+  outline: none;
+  background: transparent;
+  flex: 1;
+  font-size: 16px;
+  color: #333;
+}
+
+.add-city-form input::placeholder {
+  color: #bbb;
+}
+
+.add-city-form span {
+  color: orange;
+  cursor: pointer;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.add-city-form span:hover {
+  color: rgb(206, 134, 1);
+  transform: translateY(-2px);
+}

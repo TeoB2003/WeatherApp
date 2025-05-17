@@ -9,17 +9,20 @@ export class CityService {
   private citiesSubject = new BehaviorSubject<CityCard[]>([]);
   cities$: Observable<CityCard[]> = this.citiesSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor() {}
 
   getCities(): CityCard[] {
     return this.citiesSubject.getValue();
   }
 
-  addCity(name: string, imageUrl: string): void {
+  addCity(name: string, lat: number, lng: number, imageUrl:string): void {
+    //const imageUrl: string = this.getCityImage();
     const newCity: CityCard = {
       id: crypto.randomUUID(),
       name,
-      imageUrl
+      imageUrl,
+      lat,
+      lng,
     };
 
     const updated = [...this.getCities(), newCity];
