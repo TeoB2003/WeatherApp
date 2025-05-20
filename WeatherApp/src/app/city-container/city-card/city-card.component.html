@@ -1,7 +1,14 @@
 <div class="city-card">
-  <div class="card-background" [style.backgroundImage]="'url(' + this.city.imageUrl + ')'"></div>
+  <div
+    class="card-background"
+    [style.backgroundImage]="'url(' + this.city.imageUrl + ')'"
+  ></div>
   <div class="card-content">
     <h2 class="city-name">{{ this.city.name }}</h2>
+    <span class="favorite-btn material-icons" (click)="toggleFavorite()">
+      {{ isFavorite ? "star" : "star_border" }}
+    </span>
+
     <button class="remove-btn" (click)="onRemove()">×</button>
   </div>
 </div>

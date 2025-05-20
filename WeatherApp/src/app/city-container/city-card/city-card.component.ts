@@ -6,11 +6,19 @@ import { CityCard } from '../city-card.interface';
   selector: 'app-city-card',
   imports: [],
   templateUrl: './city-card.component.html',
-  styleUrl: './city-card.component.scss'
+  styleUrl: './city-card.component.scss',
 })
 export class CityCardComponent {
   @Input() city!: CityCard;
   @Output() remove = new EventEmitter<string>();
+  @Output() favorite = new EventEmitter<string>();
+
+  isFavorite = false;
+
+  toggleFavorite() {
+    this.isFavorite = !this.isFavorite;
+    this.favorite.emit(this.city.id);
+  }
 
   onRemove(): void {
     this.remove.emit(this.city.id);

@@ -77,4 +77,8 @@ export class CityContainerComponent {
     };
     this.cityService.updateCity(index, updatedCity);
   }
+
+  favoriteCity(id: string): void {
+    this.cityService.addFavoriteCity(id);
+  }
 }

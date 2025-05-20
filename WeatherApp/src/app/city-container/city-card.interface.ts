@@ -4,4 +4,5 @@ export interface CityCard {
   imageUrl: string;
   lat: number;
   lng: number;
+  favorite: boolean
 }

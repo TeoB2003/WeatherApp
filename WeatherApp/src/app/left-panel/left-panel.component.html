@@ -5,11 +5,15 @@
       <span class="text-color-secondary text-lg">Weather</span>
     </div>
     <div class="home-icon">
-    <div class="flex align-items-center gap-2">
-      <span class="material-icons text-orange-500">home</span>
-      <span class="text-orange-500 text-lg font-medium">Home</span>
+      <div class="flex align-items-center gap-2">
+        <span class="material-icons text-orange-500">home</span>
+        <span class="text-orange-500 text-lg font-medium">Home</span>
+      </div>
     </div>
-    </div>
+    <h2>Favorites:</h2>
+    @for(favorite of favoriteCities; track favorite.id){
+      <app-sidebar-city-card [city]="favorite" (remove)="removeFavoriteCity(favorite.id)"></app-sidebar-city-card>
+    }
   </div>
 
   <div class="bottom-section">
