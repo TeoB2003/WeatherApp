@@ -1,0 +1,30 @@
+<div class="register-container">
+  <h2>Create your account</h2>
+
+  <h3>Join us and start tracking your weather favorites today.</h3>
+
+  <form (ngSubmit)="register()" #registerForm="ngForm">
+    <input
+      type="email"
+      name="email"
+      [(ngModel)]="email"
+      required
+      placeholder="Email"
+    />
+
+    <input
+      type="password"
+      name="password"
+      [(ngModel)]="password"
+      required
+      placeholder="Password"
+    />
+
+    <button type="submit" [disabled]="registerForm.invalid">Register</button>
+  </form>
+
+  <p class="login-text">
+    Do you have an account?
+    <a (click)="goToLogin()">Login</a>
+  </p>
+</div>

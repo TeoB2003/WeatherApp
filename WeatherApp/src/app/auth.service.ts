@@ -16,7 +16,7 @@ export class AuthService {
   async login(email: string, password: string): Promise<string | null> {
     try {
       await signInWithEmailAndPassword(this.auth, email, password);
-      this.router.navigate(['/budget']);
+      this.router.navigate(['/weather/:cityName']);
       return null;
     } catch (error: any) {
       console.error('Login error:', error.message);
@@ -27,7 +27,7 @@ export class AuthService {
   async register(email: string, password: string): Promise<string | null> {
     try {
       await createUserWithEmailAndPassword(this.auth, email, password);
-      this.router.navigate(['/budget']);
+      this.router.navigate(['/weather/:cityName']);
       return null;
     } catch (error: any) {
       console.error('Registration error:', error.message);

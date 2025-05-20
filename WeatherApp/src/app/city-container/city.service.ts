@@ -35,8 +35,8 @@ export class CityService {
     this.citiesSubject.next(updatedCities);
   }
 
-  addCity(name: string, lat: number, lng: number): void {
-    const imageUrl: string = this.getCityImage();
+  addCity(name: string, lat: number, lng: number, imageUrl:string): void {
+    //const imageUrl: string = this.getCityImage();
     const newCity: CityCard = {
       id: crypto.randomUUID(),
       name,

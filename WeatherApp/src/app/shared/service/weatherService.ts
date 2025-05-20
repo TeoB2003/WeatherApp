@@ -118,7 +118,7 @@ export class WeatherService {
       if (minTemperature > weatherData.hourly.temperature2m[i])
         minTemperature = weatherData.hourly.temperature2m[i]
 
-      if (precipitationProbability < weatherData.hourly.precipitationProbability[i]) {
+      if (precipitationProbability < weatherData.hourly.precipitationProbability[i] && i>=hour) {
         precipitationProbability = weatherData.hourly.precipitationProbability[i]
         maxHour = i
       }

@@ -14,8 +14,4 @@ import { CommonModule } from '@angular/common';
 export class AppComponent {
   title = 'WeatherApp';
   router = inject(Router);
-
-  ngOnInit() {
-    this.router.navigate(['/weather', 'bucharest']);
-  }
 }
