@@ -65,7 +65,7 @@ export class CitySearchBarComponent implements AfterViewInit {
         this.selectedCityName,
         this.selectedLat,
         this.selectedLng,
-        this.imageURL
+        this.imageURL,
       );
 
       this.searchBox.nativeElement.value = '';
@@ -80,5 +80,6 @@ export class CitySearchBarComponent implements AfterViewInit {
       lat: this.selectedLat,
       lng: this.selectedLng
     })
+    console.log(this.selectedCityName)
   }
 }

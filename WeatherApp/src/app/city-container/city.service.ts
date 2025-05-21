@@ -43,7 +43,7 @@ export class CityService {
       imageUrl,
       lat,
       lng,
-      favorite: false,
+      favorite: true,
     };
 
     const updated = [...this.getCities(), newCity];

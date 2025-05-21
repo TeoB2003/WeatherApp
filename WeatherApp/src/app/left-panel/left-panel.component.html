@@ -10,10 +10,18 @@
         <span class="text-orange-500 text-lg font-medium">Home</span>
       </div>
     </div>
+  <div class="favorite-zone">
+    @if( favoriteCities.length!=0)
+    {
+
     <h2>Favorites:</h2>
+    <div class="favorite-list">
     @for(favorite of favoriteCities; track favorite.id){
       <app-sidebar-city-card [city]="favorite" (remove)="removeFavoriteCity(favorite.id)"></app-sidebar-city-card>
     }
+    </div>
+     }
+     </div>
   </div>
 
   <div class="bottom-section">

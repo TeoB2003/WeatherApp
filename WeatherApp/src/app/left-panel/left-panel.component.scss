@@ -16,6 +16,7 @@
     display: flex;
     flex-direction: column;
     gap: 2rem;
+    height: 90%;
   }
   h2{
     color: rgb(255, 152, 0)
@@ -50,6 +51,33 @@
       border-radius: 9999px;
     }
   }
+}
+
+.favorite-zone{
+  max-height: 80%;
+}
+.favorite-list{
+   overflow-y: auto;
+   max-height: 90%;
+   overflow-x: hidden;  
+}
+
+.favorite-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.favorite-list::-webkit-scrollbar-track {
+  background: #efefef; 
+  border-radius: 10px; 
+}
+
+.favorite-list::-webkit-scrollbar-thumb {
+  background: rgb(255, 152, 0);
+  border-radius: 10px; 
+}
+
+.favorite-list::-webkit-scrollbar-thumb:hover {
+  background: #ffa726; /* Slightly darker shade on hover */
 }
 
 @media screen and (max-width: 768px) {
