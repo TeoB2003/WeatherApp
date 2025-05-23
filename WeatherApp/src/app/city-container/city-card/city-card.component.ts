@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Input, Output, EventEmitter } from '@angular/core';
 import { CityCard } from '../city-card.interface';
-
+import { WeatherService } from '../../shared/service/weatherService';
+import { Router, RouterOutlet } from '@angular/router';
+import { City } from '../../shared/model/city'
 @Component({
   selector: 'app-city-card',
   imports: [],
@@ -13,6 +15,8 @@ export class CityCardComponent {
   @Output() remove = new EventEmitter<string>();
   @Output() favorite = new EventEmitter<string>();
 
+  weatherService = inject(WeatherService)
+  router = inject(Router)
   isFavorite = false;
 
   toggleFavorite() {
@@ -22,5 +26,11 @@ export class CityCardComponent {
 
   onRemove(): void {
     this.remove.emit(this.city.id);
+  }
+
+  showData() {
+    let newCity: City = { name: this.city.name, lat: this.city.lat, lng: this.city.lng }
+    this.weatherService.changeCity(newCity)
+    this.router.navigate(['/weather', this.city.name]);
   }
 }

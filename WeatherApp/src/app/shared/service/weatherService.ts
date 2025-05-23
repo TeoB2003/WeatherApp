@@ -3,8 +3,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, switchMap, of, throwError, tap, catchError, timer, last } from 'rxjs';
 import { fetchWeatherApi } from 'openmeteo';
 import { WeatherData } from '../model/weatherData';
-import { city } from '../model/city';
 import { BehaviorSubject } from 'rxjs';
+import { City } from '../model/city'
 
 @Injectable({
   providedIn: 'root'
@@ -17,17 +17,17 @@ export class WeatherService {
   private currentWeatherData: any = null;
   constructor(private http: HttpClient) { }
 
-  currentCity: city = {
+  currentCity = {
     name: 'Bucharest',
     lat: 44.439663,
     lng: 26.096306
   }
 
-  private citySubject = new BehaviorSubject<city>(this.currentCity);
+  private citySubject = new BehaviorSubject<City>(this.currentCity);
 
   // Expose the observable part of the BehaviorSubject
   currentCity$ = this.citySubject.asObservable();
-  changeCity(newCity: city)
+  changeCity(newCity: City)
   {
     this.currentCity=newCity
     this.citySubject.next(newCity);
@@ -59,6 +59,8 @@ export class WeatherService {
     const daily = response.daily()!;
 
     // Note: The order of weather variables in the URL query and the indices below need to match!
+
+    //types
     const weatherData = {
       current: {
         time: new Date((Number(current.time()) + utcOffsetSeconds) * 1000),
@@ -71,6 +73,7 @@ export class WeatherService {
         time: [...Array((Number(hourly.timeEnd()) - Number(hourly.time())) / hourly.interval())].map(
           (_, i) => new Date((Number(hourly.time()) + i * hourly.interval() + utcOffsetSeconds) * 1000)
         ),
+        ///enum intre 0,1,2,3 etc...
         temperature2m: hourly.variables(0)!.valuesArray()!,
         apparentTemperature: hourly.variables(1)!.valuesArray()!,
         precipitationProbability: hourly.variables(2)!.valuesArray()!,
