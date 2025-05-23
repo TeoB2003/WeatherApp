@@ -1,13 +1,13 @@
 import { Component, inject, input, SimpleChanges } from '@angular/core';
-import { TemperatureComponent } from "../temperature/temperature.component";
+import { TemperatureComponent } from "./temperature/temperature.component";
 import { WeatherService } from '../shared/service/weatherService';
 import { ActivatedRoute } from '@angular/router';
-import { PrecipitationProbabilityComponent } from "../precipitation-probability/precipitation-probability.component";
-import { ApparentTemperatureComponent } from "../apparent-temperature/apparent-temperature.component";
+import { PrecipitationProbabilityComponent } from "./precipitation-probability/precipitation-probability.component";
+import { ApparentTemperatureComponent } from "./apparent-temperature/apparent-temperature.component";
 import { WeatherData } from '../shared/model/weatherData';
-import { VisibilityComponent } from "../visibility/visibility.component";
-import { UvComponent } from "../uv/uv.component";
-import { PrecipitationsComponent } from "../precipitations/precipitations.component";
+import { VisibilityComponent } from "./visibility/visibility.component";
+import { UvComponent } from "./uv/uv.component";
+import { PrecipitationsComponent } from "./precipitations/precipitations.component";
 
 @Component({
   selector: 'app-day-highlights',
@@ -24,7 +24,7 @@ export class DayHighlightsComponent {
       this.weatherData=await this.dataService.getWeatherByCity()
       console.log(this.weatherData)
   }
-
+  ///maybe i should move that call 
   async ngOnChanges(changes: SimpleChanges): Promise<void> {
       console.log(this.city())
       await this.fetchWeatherData();

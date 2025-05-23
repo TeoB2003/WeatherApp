@@ -11,6 +11,7 @@ import {
 import { CityService } from '../city.service';
 import { WeatherService } from '../../shared/service/weatherService';
 import { CityCard } from '../city-card.interface';
+import { Router } from '@angular/router';
 
 declare const google: any;
 
@@ -29,6 +30,7 @@ export class CitySearchBarComponent implements AfterViewInit {
   imageURL: string = ''
 
   weatherService = inject(WeatherService)
+  router= inject(Router)
 
   constructor(private ngZone: NgZone, private cityService: CityService) { }
 
@@ -84,6 +86,8 @@ export class CitySearchBarComponent implements AfterViewInit {
     }
   }
   searchCity() {
+    this.router.navigate(['/weather', this.selectedCityName]);
+
     this.weatherService.changeCity({
       name: this.selectedCityName,
       lat: this.selectedLat,

@@ -1,6 +1,6 @@
 import { Component, input } from '@angular/core';
 import { CardModule } from 'primeng/card'; 
-import { WeatherData } from '../shared/model/weatherData';
+import { WeatherData } from '../../shared/model/weatherData';
 @Component({
   selector: 'app-precipitations',
   imports: [CardModule],
