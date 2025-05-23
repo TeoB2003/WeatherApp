@@ -9,12 +9,18 @@ import { CitySearchBarComponent } from './city-search-bar/city-search-bar.compon
 
 @Component({
   selector: 'app-city-container',
-  imports: [CityCardComponent, FormsModule, CommonModule, CitySearchBarComponent],
+  imports: [
+    CityCardComponent,
+    FormsModule,
+    CommonModule,
+    CitySearchBarComponent,
+  ],
   templateUrl: './city-container.component.html',
-  styleUrl: './city-container.component.scss'
+  styleUrl: './city-container.component.scss',
 })
 export class CityContainerComponent {
   cities: CityCard[] = [];
+  currentCity: CityCard | null = null;
   cities$: Observable<CityCard[]> | undefined;
   newCity: string = '';
 
@@ -22,16 +28,18 @@ export class CityContainerComponent {
   visibleItems = 3;
   maxIndex = 0;
 
-
-
   constructor(private cityService: CityService) {}
 
   ngOnInit(): void {
-    this.cityService.cities$.subscribe(cities => {
-      this.cities = [...cities];
-      this.calculateMaxIndex();
+    this.cityService.cities$.subscribe((cities) => {
+      this.cities = cities;
+      if (this.currentCity) {
+        this.currentCity =
+          cities.find((c) => c.id === this.currentCity?.id) || null;
+      } else {
+        this.currentCity = cities.length > 0 ? cities[0] : null;
+      }
     });
-    this.updateVisibleItems();
   }
   @HostListener('window:resize')
   onResize() {
@@ -61,10 +69,11 @@ export class CityContainerComponent {
     this.currentIndex = Math.min(this.maxIndex, this.currentIndex + 1);
   }
 
-
   removeCity(id: string): void {
     this.cityService.removeCity(id);
-    this.cities$?.forEach(cities => { console.log(cities) });
+    this.cities$?.forEach((cities) => {
+      console.log(cities);
+    });
     this.calculateMaxIndex();
     this.currentIndex = Math.min(this.currentIndex, this.maxIndex);
   }
@@ -73,12 +82,16 @@ export class CityContainerComponent {
     const cities = this.cityService.getCities();
     const updatedCity = {
       ...cities[index],
-      name: newName
+      name: newName,
     };
     this.cityService.updateCity(index, updatedCity);
   }
 
   favoriteCity(id: string): void {
     this.cityService.addFavoriteCity(id);
+  }
+
+  setCurrentCity(city: CityCard) {
+    this.currentCity = city;
   }
 }

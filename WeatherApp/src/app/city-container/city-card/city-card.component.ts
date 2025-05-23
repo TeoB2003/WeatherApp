@@ -13,10 +13,7 @@ export class CityCardComponent {
   @Output() remove = new EventEmitter<string>();
   @Output() favorite = new EventEmitter<string>();
 
-  isFavorite = false;
-
   toggleFavorite() {
-    this.isFavorite = !this.isFavorite;
     this.favorite.emit(this.city.id);
   }
 

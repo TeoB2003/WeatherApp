@@ -5,9 +5,12 @@ import {
   ElementRef,
   NgZone,
   inject,
+  Output,
+  EventEmitter,
 } from '@angular/core';
 import { CityService } from '../city.service';
 import { WeatherService } from '../../shared/service/weatherService';
+import { CityCard } from '../city-card.interface';
 
 declare const google: any;
 
@@ -18,6 +21,7 @@ declare const google: any;
 })
 export class CitySearchBarComponent implements AfterViewInit {
   @ViewChild('searchBox') searchBox!: ElementRef;
+  @Output() citySelected = new EventEmitter<CityCard>();
 
   selectedCityName: string = '';
   selectedLat: number = 0;
@@ -49,7 +53,7 @@ export class CitySearchBarComponent implements AfterViewInit {
 
         if (place.photos) {
           const photo = place.photos[1];
-          const photoUrl = photo.getUrl({ maxWidth: 700, maxHeight: 400 });  
+          const photoUrl = photo.getUrl({ maxWidth: 700, maxHeight: 400 });
           //console.log(photoUrl);
           this.imageURL=photoUrl
         }
@@ -59,7 +63,6 @@ export class CitySearchBarComponent implements AfterViewInit {
   }
 
   addCity(): void {
-    console.log(this.imageURL)
     if (this.selectedCityName && this.selectedLat && this.selectedLng) {
       this.cityService.addCity(
         this.selectedCityName,
@@ -67,6 +70,12 @@ export class CitySearchBarComponent implements AfterViewInit {
         this.selectedLng,
         this.imageURL,
       );
+      const newCity = this.cityService.getCities().find(
+        c => c.name === this.selectedCityName && c.lat === this.selectedLat && c.lng === this.selectedLng
+      );
+      if (newCity) {
+        this.citySelected.emit(newCity);
+      }
 
       this.searchBox.nativeElement.value = '';
       this.selectedCityName = '';
@@ -80,6 +89,11 @@ export class CitySearchBarComponent implements AfterViewInit {
       lat: this.selectedLat,
       lng: this.selectedLng
     })
-    console.log(this.selectedCityName)
+    const foundCity = this.cityService.getCities().find(
+      c => c.name === this.selectedCityName && c.lat === this.selectedLat && c.lng === this.selectedLng
+    );
+    if (foundCity) {
+      this.citySelected.emit(foundCity);
+    }
   }
 }
