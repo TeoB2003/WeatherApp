@@ -3,7 +3,7 @@
     class="card-background"
     [style.backgroundImage]="'url(' + this.city.imageUrl + ')'"
   ></div>
-  <div class="card-content">
+  <div class="card-content" (click)="showData()">
     <div class="card-header">
       <h2 class="city-name">{{ this.city.name }}</h2>
       <span class="favorite-btn material-icons" (click)="toggleFavorite()">
