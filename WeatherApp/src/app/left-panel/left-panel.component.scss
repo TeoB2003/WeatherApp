@@ -79,14 +79,21 @@
 .favorite-list::-webkit-scrollbar-thumb:hover {
   background: #ffa726; /* Slightly darker shade on hover */
 }
+.menu-btn{
+  display: none;
+}
 
 @media screen and (max-width: 768px) {
   .left-panel {
+    //display: none;
+    display: flex;
     flex-direction: row;
-    height: 100%;
-    width: 100%;
+    height: 90%;
+    max-width: 100vw;
     margin: 0;
     border-radius: 0;
+    padding-left: 0;
+    padding-right: 0;
 
     .bottom-section {
       display: none;
@@ -95,6 +102,9 @@
     .home-icon {
       display: none;
     }
+    .menu-btn{
+      display: block;
+    } 
   }
 
 }

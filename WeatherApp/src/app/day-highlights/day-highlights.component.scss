@@ -96,6 +96,11 @@ $left: 45%;
 @media screen and (max-width: 768px) {
   .all{
     background-color: white;
+    margin-top: 1%;
+    margin: 0;
+    width: 90vw;
+    margin-left: 5vw;
+    height: auto;
   }
   .city-info{
     flex-direction: column;
@@ -107,7 +112,7 @@ $left: 45%;
   }
   .chart-area{
     width: 100%;
-    height: auto;
+    min-height:150px;
     margin-top: 2%;
   }
   .left-left-column{
