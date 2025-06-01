@@ -4,19 +4,51 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signOut,
+  updateProfile,
 } from '@angular/fire/auth';
 import { Router } from '@angular/router';
+import { Firestore, doc, setDoc, getDoc } from '@angular/fire/firestore';
+import { sendPasswordResetEmail } from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private auth: Auth, private router: Router) {}
+  constructor(
+    private auth: Auth,
+    private router: Router,
+    private firestore: Firestore
+  ) {}
 
   async login(email: string, password: string): Promise<string | null> {
     try {
-      await signInWithEmailAndPassword(this.auth, email, password);
-      this.router.navigate(['/weather/:cityName']);
+      const userCredential = await signInWithEmailAndPassword(
+        this.auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+
+      const userDocRef = doc(this.firestore, `users/${user.uid}`);
+      const userDocSnap = await getDoc(userDocRef);
+
+      let username = '';
+
+      if (userDocSnap.exists()) {
+        const data = userDocSnap.data() as { username: string };
+        username = data.username;
+      } else {
+        username = user.displayName ?? 'User';
+        await setDoc(userDocRef, {
+          uid: user.uid,
+          email: user.email,
+          username: username,
+          createdAt: new Date(),
+        });
+      }
+
+      localStorage.setItem('username', username);
+      this.router.navigate(['/weather/bucharest']);
       return null;
     } catch (error: any) {
       console.error('Login error:', error.message);
@@ -24,10 +56,31 @@ export class AuthService {
     }
   }
 
-  async register(email: string, password: string): Promise<string | null> {
+  async register(
+    username: string,
+    email: string,
+    password: string
+  ): Promise<string | null> {
     try {
-      await createUserWithEmailAndPassword(this.auth, email, password);
-      this.router.navigate(['/weather/:cityName']);
+      const userCredential = await createUserWithEmailAndPassword(
+        this.auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+
+      await updateProfile(user, { displayName: username });
+
+      await setDoc(doc(this.firestore, `users/${user.uid}`), {
+        uid: user.uid,
+        email: user.email,
+        username: username,
+        createdAt: new Date(),
+      });
+
+      localStorage.setItem('username', username);
+
+      this.router.navigate(['/weather/bucharest']);
       return null;
     } catch (error: any) {
       console.error('Registration error:', error.message);
@@ -38,9 +91,20 @@ export class AuthService {
   async logout() {
     try {
       await signOut(this.auth);
+      localStorage.removeItem('username');
       this.router.navigate(['/login']);
     } catch (error) {
       console.error('Logout error:', error);
+    }
+  }
+
+  async resetPassword(email: string): Promise<string | null> {
+    try {
+      await sendPasswordResetEmail(this.auth, email);
+      return null;
+    } catch (error: any) {
+      console.error('Password reset error:', error.message);
+      return this.getErrorMessage(error.code, 'reset');
     }
   }
 
@@ -54,7 +118,7 @@ export class AuthService {
 
   private getErrorMessage(
     errorCode: string,
-    context: 'login' | 'register'
+    context: 'login' | 'register' | 'reset'
   ): string {
     switch (errorCode) {
       case 'auth/user-not-found':

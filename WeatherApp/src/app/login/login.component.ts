@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Auth, signInWithEmailAndPassword } from '@angular/fire/auth';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../auth.service';
 
 @Component({
   standalone: true,
@@ -15,18 +16,20 @@ export class LoginComponent {
   email = '';
   password = '';
 
-  constructor(private auth: Auth, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
-  onLogin() {
-    signInWithEmailAndPassword(this.auth, this.email, this.password)
-      .then(() => {
-        this.router.navigate(['/weather/bucharest']);
-      })
-      .catch((err) => {
-        alert('Login failed: ' + err.message);
-      });
+  async onLogin() {
+    const error = await this.authService.login(this.email, this.password);
+    if (error) {
+      alert('Login failed: ' + error);
+    }
   }
+
   goToRegister() {
     this.router.navigate(['/register']);
+  }
+
+  goToReset() {
+    this.router.navigate(['/reset-password']);
   }
 }

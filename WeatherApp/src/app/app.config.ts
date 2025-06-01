@@ -7,6 +7,7 @@ import { withInterceptorsFromDi } from '@angular/common/http';
 import { provideHttpClient } from '@angular/common/http';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
+import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 
 import { routes } from './app.routes';
 
@@ -38,5 +39,6 @@ export const appConfig: ApplicationConfig = {
 
     provideFirebaseApp(() => initializeApp(firebaseConfig)),
     provideAuth(() => getAuth()),
+    provideFirestore(() => getFirestore()),
   ],
 };

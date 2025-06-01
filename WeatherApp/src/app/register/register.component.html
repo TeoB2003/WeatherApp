@@ -5,6 +5,13 @@
 
   <form (ngSubmit)="register()" #registerForm="ngForm">
     <input
+      type="text"
+      name="username"
+      [(ngModel)]="username"
+      required
+      placeholder="Username"
+    />
+    <input
       type="email"
       name="email"
       [(ngModel)]="email"

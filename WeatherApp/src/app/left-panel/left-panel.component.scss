@@ -1,4 +1,4 @@
-@import 'primeflex/primeflex.scss';
+@import "primeflex/primeflex.scss";
 
 .left-panel {
   display: flex;
@@ -18,8 +18,8 @@
     gap: 2rem;
     height: 90%;
   }
-  h2{
-    color: rgb(255, 152, 0)
+  h2 {
+    color: rgb(255, 152, 0);
   }
 
   .bottom-section {
@@ -53,13 +53,13 @@
   }
 }
 
-.favorite-zone{
+.favorite-zone {
   max-height: 80%;
 }
-.favorite-list{
-   overflow-y: auto;
-   max-height: 90%;
-   overflow-x: hidden;  
+.favorite-list {
+  overflow-y: auto;
+  max-height: 90%;
+  overflow-x: hidden;
 }
 
 .favorite-list::-webkit-scrollbar {
@@ -67,20 +67,46 @@
 }
 
 .favorite-list::-webkit-scrollbar-track {
-  background: #efefef; 
-  border-radius: 10px; 
+  background: #efefef;
+  border-radius: 10px;
 }
 
 .favorite-list::-webkit-scrollbar-thumb {
   background: rgb(255, 152, 0);
-  border-radius: 10px; 
+  border-radius: 10px;
 }
 
 .favorite-list::-webkit-scrollbar-thumb:hover {
   background: #ffa726; /* Slightly darker shade on hover */
 }
-.menu-btn{
+.menu-btn {
   display: none;
+}
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+  max-width: 100px;
+  gap: 0.4rem;
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #4a4a4a;
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 500;
+  align-self: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover {
+    background-color: #333;
+  }
+
+  .material-icons {
+    font-size: 18px;
+  }
 }
 
 @media screen and (max-width: 768px) {
@@ -102,9 +128,8 @@
     .home-icon {
       display: none;
     }
-    .menu-btn{
+    .menu-btn {
       display: block;
-    } 
+    }
   }
-
 }

@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
   imports: [FormsModule, CommonModule],
 })
 export class RegisterComponent {
+  username: string = '';
   email: string = '';
   password: string = '';
   errorMessage: string | null = null;
@@ -20,14 +21,16 @@ export class RegisterComponent {
 
   async register() {
     try {
-      const error = await this.authService.register(this.email, this.password);
+      const error = await this.authService.register(
+        this.username,
+        this.email,
+        this.password
+      );
       if (error) {
         this.errorMessage = error;
-      } else {
-        this.router.navigate(['/weather/bucharest']);
       }
     } catch (error) {
-      this.errorMessage = 'There was an error registering. Please try again!';
+      this.errorMessage = 'Registration failed. Please try again.';
     }
   }
 
