@@ -1,47 +1,65 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, switchMap, of, throwError, tap, catchError, timer, last } from 'rxjs';
+import {
+  Observable,
+  switchMap,
+  of,
+  throwError,
+  tap,
+  catchError,
+  timer,
+  last,
+} from 'rxjs';
 import { fetchWeatherApi } from 'openmeteo';
 import { WeatherData } from '../model/weatherData';
 import { BehaviorSubject } from 'rxjs';
-import { City } from '../model/city'
+import { City } from '../model/city';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class WeatherService {
-  url = "https://api.open-meteo.com/v1/forecast";
+  url = 'https://api.open-meteo.com/v1/forecast';
 
-  private readonly geocodingUrl = 'https://geocoding-api.open-meteo.com/v1/search';
+  private readonly geocodingUrl =
+    'https://geocoding-api.open-meteo.com/v1/search';
 
   private currentWeatherData: any = null;
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   currentCity = {
     name: 'Bucharest',
     lat: 44.439663,
-    lng: 26.096306
-  }
+    lng: 26.096306,
+  };
 
   private citySubject = new BehaviorSubject<City>(this.currentCity);
 
   // Expose the observable part of the BehaviorSubject
   currentCity$ = this.citySubject.asObservable();
-  changeCity(newCity: City)
-  {
-    this.currentCity=newCity
+  changeCity(newCity: City) {
+    this.currentCity = newCity;
     this.citySubject.next(newCity);
   }
   async getWeatherByCity() {
     const params = {
-      "latitude": this.currentCity.lat,
-      "longitude": this.currentCity.lng,
-      "daily": "uv_index_max",
-      "hourly": ["temperature_2m", "apparent_temperature", "precipitation_probability", "precipitation", "visibility", "rain", "showers", "snowfall"],
-      "current": ["apparent_temperature", "rain", "showers", "snowfall"],
-      "timezone": "auto"
+      latitude: this.currentCity.lat,
+      longitude: this.currentCity.lng,
+      daily: 'uv_index_max',
+      hourly: [
+        'temperature_2m',
+        'apparent_temperature',
+        'precipitation_probability',
+        'precipitation',
+        'visibility',
+        'rain',
+        'showers',
+        'snowfall',
+      ],
+      current: ['apparent_temperature', 'rain', 'showers', 'snowfall'],
+      timezone: 'auto',
     };
-    const url = "https://api.open-meteo.com/v1/forecast";
+    const url = 'https://api.open-meteo.com/v1/forecast';
     const responses = await fetchWeatherApi(url, params);
 
     // Process first location. Add a for-loop for multiple locations or weather models
@@ -70,8 +88,19 @@ export class WeatherService {
         snowfall: current.variables(3)!.value(),
       },
       hourly: {
-        time: [...Array((Number(hourly.timeEnd()) - Number(hourly.time())) / hourly.interval())].map(
-          (_, i) => new Date((Number(hourly.time()) + i * hourly.interval() + utcOffsetSeconds) * 1000)
+        time: [
+          ...Array(
+            (Number(hourly.timeEnd()) - Number(hourly.time())) /
+              hourly.interval()
+          ),
+        ].map(
+          (_, i) =>
+            new Date(
+              (Number(hourly.time()) +
+                i * hourly.interval() +
+                utcOffsetSeconds) *
+                1000
+            )
         ),
         ///enum intre 0,1,2,3 etc...
         temperature2m: hourly.variables(0)!.valuesArray()!,
@@ -84,24 +113,30 @@ export class WeatherService {
         snowfall: hourly.variables(7)!.valuesArray()!,
       },
       daily: {
-        time: [...Array((Number(daily.timeEnd()) - Number(daily.time())) / daily.interval())].map(
-          (_, i) => new Date((Number(daily.time()) + i * daily.interval() + utcOffsetSeconds) * 1000)
+        time: [
+          ...Array(
+            (Number(daily.timeEnd()) - Number(daily.time())) / daily.interval()
+          ),
+        ].map(
+          (_, i) =>
+            new Date(
+              (Number(daily.time()) + i * daily.interval() + utcOffsetSeconds) *
+                1000
+            )
         ),
         uvIndexMax: daily.variables(0)!.valuesArray()!,
       },
     };
 
-    let now = new Date()
+    let now = new Date();
 
+    let hour = now.getHours();
 
-    let hour = now.getHours()
-
-    let maxTemperature = -100
-    let minTemperature = 100
-    let visibilityNow = weatherData.hourly.visibility[hour]
-    let precipitationProbability = 0
-    let maxHour = 0
-
+    let maxTemperature = -100;
+    let minTemperature = 100;
+    let visibilityNow = weatherData.hourly.visibility[hour];
+    let precipitationProbability = 0;
+    let maxHour = 0;
 
     //merg doar pe ziua curenta
     for (let i = 0; i < 24; i++) {
@@ -116,33 +151,49 @@ export class WeatherService {
       );*/
 
       if (maxTemperature < weatherData.hourly.temperature2m[i])
-        maxTemperature = weatherData.hourly.temperature2m[i]
+        maxTemperature = weatherData.hourly.temperature2m[i];
 
       if (minTemperature > weatherData.hourly.temperature2m[i])
-        minTemperature = weatherData.hourly.temperature2m[i]
+        minTemperature = weatherData.hourly.temperature2m[i];
 
-      if (precipitationProbability < weatherData.hourly.precipitationProbability[i] && i>=hour) {
-        precipitationProbability = weatherData.hourly.precipitationProbability[i]
-        maxHour = i
+      if (
+        precipitationProbability <
+          weatherData.hourly.precipitationProbability[i] &&
+        i >= hour
+      ) {
+        precipitationProbability =
+          weatherData.hourly.precipitationProbability[i];
+        maxHour = i;
       }
     }
+
+    const hourlyTemperatures = weatherData.hourly.time
+      .map((t, i) => ({
+        hour: t.getHours().toString().padStart(2, '0') + ':00',
+        temp: weatherData.hourly.temperature2m[i],
+      }))
+      .slice(0, 24);
 
     let result: WeatherData = {
       maxTemperatureToday: maxTemperature,
       minTemperatureToday: minTemperature,
-      maxPrecipitationProbabilityToday: { prob: precipitationProbability, hour: maxHour },
+      maxPrecipitationProbabilityToday: {
+        prob: precipitationProbability,
+        hour: maxHour,
+      },
       visibilityNow: visibilityNow,
       UVIndex: weatherData.daily.uvIndexMax[0],
       apparentTemperature: weatherData.current.apparentTemperature,
       precipitation: {
         showers: weatherData.current.showers,
         snowfall: weatherData.current.snowfall,
-        rain: weatherData.current.rain
+        rain: weatherData.current.rain,
       },
-      precipitationNow: weatherData.hourly.precipitationProbability[hour]
-    }
+      precipitationNow: weatherData.hourly.precipitationProbability[hour],
 
-    return result
+      hourlyTemperatures: hourlyTemperatures,
+    };
 
+    return result;
   }
 }
