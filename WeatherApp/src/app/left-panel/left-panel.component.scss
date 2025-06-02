@@ -25,6 +25,7 @@
   .bottom-section {
     display: flex;
     justify-content: center;
+    flex-direction: column;
   }
 
   .hello-user-btn {
@@ -114,14 +115,31 @@
     //display: none;
     display: flex;
     flex-direction: row;
-    height: 90%;
-    max-width: 100vw;
+    height: 100%;
+    max-width: 95vw;
     margin: 0;
     border-radius: 0;
     padding-left: 0;
     padding-right: 0;
+    align-items: center;
+
+    .top-section
+    {
+      padding-left: 1%;
+      padding-right: 1%;
+      margin: 0;
+      padding: 0;
+      width: 98%;
+      height: 170%;
+      display: flex;
+      flex-direction: row;
+      gap: 0;
+      justify-content: space-between;
+    }
 
     .bottom-section {
+      width: 0;
+      height: 0;
       display: none;
     }
 
@@ -129,7 +147,7 @@
       display: none;
     }
     .menu-btn {
-      display: block;
+       display: inline;
     }
   }
 }

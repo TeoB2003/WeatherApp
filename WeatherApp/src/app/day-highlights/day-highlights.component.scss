@@ -32,10 +32,11 @@ $left: 45%;
   flex: 1;
   min-height: 250px;
   padding: 1rem;
-  background-color: antiquewhite;
+  background-color: #c9c9c9;
   display: flex;
   justify-content: center;
   align-items: center;
+  border-radius: 10px;
 }
 
 .left-left-column {
@@ -99,10 +100,12 @@ $left: 45%;
 @media screen and (max-width: 768px) {
   .all {
     background-color: white;
+    border-radius: 0;
     margin-top: 1%;
     margin: 0;
     width: 90vw;
     margin-left: 5vw;
+    margin-right: 5vh;
     height: auto;
   }
   .city-info {

@@ -4,29 +4,15 @@
       <span class="material-icons dark-grey-icon">wb_sunny</span>
       <span class="text-color-secondary text-lg">Weather</span>
     </div>
+    <button class="menu-btn">
+      <span class="material-icons">menu</span>
+    </button>
     <div class="home-icon">
       <div class="flex align-items-center gap-2">
         <span class="material-icons text-orange-500">home</span>
         <span class="text-orange-500 text-lg font-medium">Home</span>
       </div>
     </div>
-    <div class="favorite-zone">
-      @if( favoriteCities.length!=0) {
-
-      <span class="text-orange-500 text-lg font-medium">Favorites:</span>
-      <div class="favorite-list">
-        @for(favorite of favoriteCities; track favorite.id){
-        <app-sidebar-city-card
-          [city]="favorite"
-          (remove)="removeFavoriteCity(favorite.id)"
-        ></app-sidebar-city-card>
-        }
-      </div>
-      }
-    </div>
-    <button class="menu-btn">
-      <span class="material-icons">menu</span>
-    </button>
   </div>
 
   <div class="bottom-section">
@@ -34,10 +20,11 @@
       <span class="material-icons">person</span>
       <span>Hello, {{ username }}</span>
     </button>
+
+    <button class="logout-btn" (click)="logout()">
+      <span class="material-icons">logout</span>
+      <span>Logout</span>
+    </button>
   </div>
 
-  <button class="logout-btn" (click)="logout()">
-    <span class="material-icons">logout</span>
-    <span>Logout</span>
-  </button>
 </div>
