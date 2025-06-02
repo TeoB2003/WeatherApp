@@ -7,8 +7,7 @@
   width: 37%;
   height: 10%;
   margin-top: 2%;
-  margin-left: auto;
-  margin-right: auto;
+  margin-left: 31.5%;
   margin-bottom: 2%;
 }
 
@@ -36,40 +35,39 @@
 
 .city-manager {
   padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
 }
 
 .carousel-wrapper {
   overflow: hidden;
   position: relative;
-  margin: 0 auto;
-  max-width: 1200px;
-  padding: 0 60px;
+  margin: 0;
+  max-width: 100%;
+  padding: 0 0 0 0;
+}
 
-  .carousel-container {
-    position: relative;
-    width: calc(100% - 120px);
-    margin: 0 auto;
-  }
+.carousel-container {
+  position: relative;
+  width: 100%;
+  margin: 0;
 }
 
 .carousel-track {
   display: flex;
   transition: transform 0.5s ease-in-out;
   width: 100%;
-  padding: 0 15px;
+  padding-left: 0;
+  padding-right: 15px;
+  gap: 2rem;
 }
-
 .carousel-item {
-  flex: 0 0 calc(100% / var(--visible-items, 3) - 30px);
+  flex: 0 0 calc(100% / var(--visible-items, 4) - 30px);
   margin: 0 15px;
   box-sizing: border-box;
   transform: translateZ(0);
 }
 
 .carousel-controls {
+  color: black;
   position: absolute;
   top: 50%;
   left: 0;
@@ -83,36 +81,68 @@
   button {
     position: relative;
     pointer-events: all;
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.7);
     border: none;
-    padding: 12px 18px;
+    padding: 0;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
     cursor: pointer;
-    font-size: 1.8rem;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.15);
-    transition: all 0.3s ease;
-    z-index: 10;
+    font-size: 2.2rem;
+    color: #ff9800;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, color 0.2s, transform 0.2s, box-shadow 0.2s;
     margin: 0 -40px;
+    outline: none;
+    border: 2px solid transparent;
 
     &:first-child {
-      margin-left: -20px;
+      margin-left: 5px;
     }
 
     &:last-child {
-      margin-right: -20px;
+      margin-right: 5px;
     }
 
-    &:hover {
-      background: white;
-      transform: scale(1.1);
-      box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+    &:hover:not(:disabled) {
+      background: #fff3e0;
+      color: #e65100;
+      transform: scale(1.13);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+      border: 2px solid #ff9800;
     }
 
     &:disabled {
-      opacity: 0.3;
+      opacity: 0.4;
       transform: scale(1);
       cursor: not-allowed;
+      color: #bdbdbd;
+      background: rgba(255,255,255,0.5);
+      border: 2px solid #eee;
     }
+  }
+}
+
+:host {
+  --visible-items: 4;
+}
+
+@media (max-width: 1279px) {
+  :host {
+    --visible-items: 3;
+  }
+}
+@media (max-width: 1023px) {
+  :host {
+    --visible-items: 2;
+  }
+}
+@media (max-width: 767px) {
+  :host {
+    --visible-items: 1;
   }
 }
 
@@ -126,13 +156,10 @@
   }
 
   .carousel-controls button {
-    margin: 0 -30px;
-    padding: 10px 15px;
+    width: 38px;
+    height: 38px;
     font-size: 1.5rem;
-  }
-
-  .add-city-form{
-    width: 80%;
+    margin: 0 -30px;
   }
 }
 
@@ -146,8 +173,9 @@
   }
 
   .carousel-controls button {
+    width: 30px;
+    height: 30px;
+    font-size: 1.1rem;
     margin: 0 -20px;
-    padding: 8px 12px;
-    font-size: 1.2rem;
   }
 }

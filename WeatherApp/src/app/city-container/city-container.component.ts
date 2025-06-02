@@ -39,7 +39,15 @@ export class CityContainerComponent {
       } else {
         this.currentCity = cities.length > 0 ? cities[0] : null;
       }
+      if (this.currentCity) {
+        this.cities = [
+          this.currentCity,
+          ...cities.filter((c) => c.id !== this.currentCity!.id),
+        ];
+      }
+      this.updateVisibleItems();
     });
+    this.updateVisibleItems();
   }
   @HostListener('window:resize')
   onResize() {
@@ -48,7 +56,14 @@ export class CityContainerComponent {
 
   updateVisibleItems() {
     const width = window.innerWidth;
-    this.visibleItems = width >= 1024 ? 3 : width >= 768 ? 2 : 1;
+    this.visibleItems =
+      width >= 1280
+        ? 4
+        : width >= 1024
+        ? 3
+        : width >= 768
+        ? 2
+        : 1;
     this.calculateMaxIndex();
   }
 
@@ -93,5 +108,6 @@ export class CityContainerComponent {
 
   setCurrentCity(city: CityCard) {
     this.currentCity = city;
+    this.cities = [city, ...this.cities.filter((c) => c.id !== city.id)];
   }
 }

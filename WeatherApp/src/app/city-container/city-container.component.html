@@ -1,14 +1,25 @@
 <div class="city-manager">
-  <app-city-search-bar (citySelected)="setCurrentCity($event)"></app-city-search-bar>
+  <app-city-search-bar
+    (citySelected)="setCurrentCity($event)"
+  ></app-city-search-bar>
 
-  <div *ngIf="currentCity">
-    <app-city-card
-      [city]="currentCity"
-      (remove)="removeCity(currentCity.id)"
-      (favorite)="favoriteCity(currentCity.id)">
-    </app-city-card>
-  </div>
-  <div *ngIf="!currentCity" class="no-city">
-    <p>No city selected.</p>
+  <div class="carousel-wrapper">
+    <div class="carousel-container">
+      <div class="carousel-track" [style.transform]="transformValue">
+        <div *ngFor="let city of cities" class="carousel-item">
+          <app-city-card
+            [city]="city"
+            (remove)="removeCity(city.id)"
+            (favorite)="favoriteCity(city.id)"
+            (click)="setCurrentCity(city)"
+          ></app-city-card>
+        </div>
+      </div>
+      <div class="carousel-controls">
+      <button (click)="prev()" [disabled]="currentIndex === 0">‹</button>
+      <button (click)="next()" [disabled]="currentIndex >= maxIndex">›</button>
+    </div>
+    </div>
+
   </div>
 </div>

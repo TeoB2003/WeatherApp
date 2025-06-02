@@ -100,4 +100,30 @@ export class CitySearchBarComponent implements AfterViewInit {
       this.citySelected.emit(foundCity);
     }
   }
+  addCityAndSearch(): void {
+    if (this.selectedCityName && this.selectedLat && this.selectedLng) {
+      this.cityService.addCity(
+        this.selectedCityName,
+        this.selectedLat,
+        this.selectedLng,
+        this.imageURL,
+      );
+      const newCity = this.cityService.getCities().find(
+        c => c.name === this.selectedCityName && c.lat === this.selectedLat && c.lng === this.selectedLng
+      );
+      if (newCity) {
+        this.citySelected.emit(newCity);
+        this.weatherService.changeCity({
+          name: newCity.name,
+          lat: newCity.lat,
+          lng: newCity.lng
+        });
+        this.router.navigate(['/weather', newCity.name]);
+      }
+      this.searchBox.nativeElement.value = '';
+      this.selectedCityName = '';
+      this.selectedLat = 0;
+      this.selectedLng = 0;
+    }
+  }
 }
