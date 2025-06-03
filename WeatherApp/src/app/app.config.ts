@@ -42,3 +42,4 @@ export const appConfig: ApplicationConfig = {
     provideFirestore(() => getFirestore()),
   ],
 };
+export class AppModule {}
