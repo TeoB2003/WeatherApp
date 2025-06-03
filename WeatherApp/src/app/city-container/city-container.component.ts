@@ -57,13 +57,7 @@ export class CityContainerComponent {
   updateVisibleItems() {
     const width = window.innerWidth;
     this.visibleItems =
-      width >= 1280
-        ? 4
-        : width >= 1024
-        ? 3
-        : width >= 768
-        ? 2
-        : 1;
+      width >= 1280 ? 4 : width >= 1024 ? 3 : width >= 768 ? 2 : 1;
     this.calculateMaxIndex();
   }
 
@@ -103,6 +97,7 @@ export class CityContainerComponent {
   }
 
   favoriteCity(id: string): void {
+    console.log('📌 favoriteCity called with:', id);
     this.cityService.addFavoriteCity(id);
   }
 
