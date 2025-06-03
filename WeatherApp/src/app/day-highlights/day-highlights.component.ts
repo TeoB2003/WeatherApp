@@ -1,7 +1,6 @@
-import { Component, inject, Input, input, SimpleChanges } from '@angular/core';
+import { Component, inject, Input, SimpleChanges } from '@angular/core';
 import { TemperatureComponent } from './temperature/temperature.component';
 import { WeatherService } from '../shared/service/weatherService';
-import { ActivatedRoute } from '@angular/router';
 import { PrecipitationProbabilityComponent } from './precipitation-probability/precipitation-probability.component';
 import { ApparentTemperatureComponent } from './apparent-temperature/apparent-temperature.component';
 import { WeatherData } from '../shared/model/weatherData';
@@ -14,6 +13,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
   selector: 'app-day-highlights',
   templateUrl: './day-highlights.component.html',
   styleUrls: ['./day-highlights.component.scss'],
+  standalone: true,
   imports: [
     NgxChartsModule,
     TemperatureComponent,
@@ -25,42 +25,50 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
   ],
 })
 export class DayHighlightsComponent {
-  dataService = inject(WeatherService);
+  private dataService = inject(WeatherService);
   weatherData!: WeatherData;
 
   @Input() city: string = '';
   chartData: any[] = [];
   view: [number, number] = [600, 300];
+
   colorScheme = {
     domain: ['#3182ce'],
   };
 
-  async ngOnInit(): Promise<void> {
+  ngOnInit(): void {
     this.updateChartSize();
     window.addEventListener('resize', this.updateChartSize.bind(this));
     this.fetchWeatherData();
   }
 
-  async ngOnChanges(changes: SimpleChanges): Promise<void> {
+  ngOnChanges(changes: SimpleChanges): void {
     if (changes['city']) {
-      await this.fetchWeatherData();
+      this.fetchWeatherData();
     }
   }
 
-  private async fetchWeatherData(): Promise<void> {
-    this.weatherData = await this.dataService.getWeatherByCity();
-    console.log(this.weatherData);
-
-    this.chartData = [
-      {
-        name: 'Temperature',
-        series: this.weatherData.hourlyTemperatures.map((d) => ({
-          name: d.hour,
-          value: d.temp,
-        })),
+  private fetchWeatherData(): void {
+    this.dataService.getWeatherByCity().subscribe({
+      next: (data: WeatherData) => {
+        this.weatherData = data;
+        console.log(data)
+        this.chartData = [
+          {
+            name: 'Temperature',
+            series: this.weatherData.hourlyTemperatures.map((d) => ({
+              name: d.hour,
+              value: d.temp,
+            })),
+          },
+        ];
       },
-    ];
+      error: (err) => {
+        console.error('Failed to fetch weather data:', err);
+      },
+    });
   }
+
   updateChartSize(): void {
     const width = window.innerWidth;
 
@@ -72,6 +80,7 @@ export class DayHighlightsComponent {
       this.view = [320, 200];
     }
   }
+
   xAxisTickFormat = (val: string) => {
     const hour = parseInt(val.split(':')[0], 10);
     return hour % 3 === 0 ? val : '';

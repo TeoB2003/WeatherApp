@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import {
   Observable,
@@ -8,7 +8,7 @@ import {
   tap,
   catchError,
   timer,
-  last,
+  last, map
 } from 'rxjs';
 import { fetchWeatherApi } from 'openmeteo';
 import { WeatherData } from '../model/weatherData';
@@ -25,7 +25,8 @@ export class WeatherService {
     'https://geocoding-api.open-meteo.com/v1/search';
 
   private currentWeatherData: any = null;
-  constructor(private http: HttpClient) {}
+
+  http=inject(HttpClient);
 
   currentCity = {
     name: 'Bucharest',
@@ -41,159 +42,73 @@ export class WeatherService {
     this.currentCity = newCity;
     this.citySubject.next(newCity);
   }
-  async getWeatherByCity() {
-    const params = {
-      latitude: this.currentCity.lat,
-      longitude: this.currentCity.lng,
-      daily: 'uv_index_max',
-      hourly: [
-        'temperature_2m',
-        'apparent_temperature',
-        'precipitation_probability',
-        'precipitation',
-        'visibility',
-        'rain',
-        'showers',
-        'snowfall',
-      ],
-      current: ['apparent_temperature', 'rain', 'showers', 'snowfall'],
-      timezone: 'auto',
-    };
-    const url = 'https://api.open-meteo.com/v1/forecast';
-    const responses = await fetchWeatherApi(url, params);
 
-    // Process first location. Add a for-loop for multiple locations or weather models
-    const response = responses[0];
+getWeatherByCity(): Observable<WeatherData> {
+  const params = new URLSearchParams({
+    latitude: this.currentCity.lat.toString(),
+    longitude: this.currentCity.lng.toString(),
+    daily: 'uv_index_max',
+    hourly: [
+      'temperature_2m',
+      'apparent_temperature',
+      'precipitation_probability',
+      'precipitation',
+      'visibility',
+      'rain',
+      'showers',
+      'snowfall',
+    ].join(','),
+    current: ['apparent_temperature', 'rain', 'showers', 'snowfall'].join(','),
+    timezone: 'auto',
+  });
 
-    // Attributes for timezone and location
-    const utcOffsetSeconds = response.utcOffsetSeconds();
-    const timezone = response.timezone();
-    const timezoneAbbreviation = response.timezoneAbbreviation();
-    const latitude = response.latitude();
-    const longitude = response.longitude();
+  return this.http.get<any>(`${this.url}?${params}`).pipe(
+    map(response => {
+      const current = response.current;
+      const hourly = response.hourly;
+      const daily = response.daily;
 
-    const current = response.current()!;
-    const hourly = response.hourly()!;
-    const daily = response.daily()!;
+      // Datele sunt în format text ISO deja (ex: "2025-06-03T14:00")
+      const hourlyTimes: Date[] = hourly.time.map((t: string) => new Date(t));
 
-    // Note: The order of weather variables in the URL query and the indices below need to match!
+      const temperatureArray = hourly.temperature_2m;
+      const precipitationProbabilityArray = hourly.precipitation_probability;
 
-    //types
-    const weatherData = {
-      current: {
-        time: new Date((Number(current.time()) + utcOffsetSeconds) * 1000),
-        apparentTemperature: current.variables(0)!.value(),
-        rain: current.variables(1)!.value(),
-        showers: current.variables(2)!.value(),
-        snowfall: current.variables(3)!.value(),
-      },
-      hourly: {
-        time: [
-          ...Array(
-            (Number(hourly.timeEnd()) - Number(hourly.time())) /
-              hourly.interval()
-          ),
-        ].map(
-          (_, i) =>
-            new Date(
-              (Number(hourly.time()) +
-                i * hourly.interval() +
-                utcOffsetSeconds) *
-                1000
-            )
-        ),
-        ///enum intre 0,1,2,3 etc...
-        temperature2m: hourly.variables(0)!.valuesArray()!,
-        apparentTemperature: hourly.variables(1)!.valuesArray()!,
-        precipitationProbability: hourly.variables(2)!.valuesArray()!,
-        precipitation: hourly.variables(3)!.valuesArray()!,
-        visibility: hourly.variables(4)!.valuesArray()!,
-        rain: hourly.variables(5)!.valuesArray()!,
-        showers: hourly.variables(6)!.valuesArray()!,
-        snowfall: hourly.variables(7)!.valuesArray()!,
-      },
-      daily: {
-        time: [
-          ...Array(
-            (Number(daily.timeEnd()) - Number(daily.time())) / daily.interval()
-          ),
-        ].map(
-          (_, i) =>
-            new Date(
-              (Number(daily.time()) + i * daily.interval() + utcOffsetSeconds) *
-                1000
-            )
-        ),
-        uvIndexMax: daily.variables(0)!.valuesArray()!,
-      },
-    };
+      // Primele 24 de ore
+      const first24 = precipitationProbabilityArray.slice(0, 24);
+      const maxProb = Math.max(...first24);
+      const maxHourIndex = first24.indexOf(maxProb);
 
-    let now = new Date();
+      const weatherData: WeatherData = {
+        maxTemperatureToday: Math.max(...temperatureArray),
+        minTemperatureToday: Math.min(...temperatureArray),
+        maxPrecipitationProbabilityToday: {
+          prob: maxProb,
+          hour: maxHourIndex,
+        },
+        visibilityNow: current.visibility,
+        UVIndex: daily.uv_index_max[0],
+        apparentTemperature: current.apparent_temperature,
+        precipitation: {
+          showers: current.showers,
+          snowfall: current.snowfall,
+          rain: current.rain,
+        },
+        precipitationNow: precipitationProbabilityArray[new Date().getHours()],
+        hourlyTemperatures: temperatureArray.map((temp: number, i: number) => ({
+          hour: hourlyTimes[i].toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }),
+          temp,
+        })),
+      };
 
-    let hour = now.getHours();
-
-    let maxTemperature = -100;
-    let minTemperature = 100;
-    let visibilityNow = weatherData.hourly.visibility[hour];
-    let precipitationProbability = 0;
-    let maxHour = 0;
-
-    //merg doar pe ziua curenta
-    for (let i = 0; i < 24; i++) {
-      /*console.log(
-        weatherData.hourly.time[i].toISOString(),
-        weatherData.hourly.temperature2m[i],
-        weatherData.hourly.apparentTemperature[i],
-        weatherData.hourly.precipitationProbability[i],
-        weatherData.hourly.precipitation[i],
-        weatherData.hourly.visibility[i],
-        weatherData.hourly.surfacePressure[i]
-      );*/
-
-      if (maxTemperature < weatherData.hourly.temperature2m[i])
-        maxTemperature = weatherData.hourly.temperature2m[i];
-
-      if (minTemperature > weatherData.hourly.temperature2m[i])
-        minTemperature = weatherData.hourly.temperature2m[i];
-
-      if (
-        precipitationProbability <
-          weatherData.hourly.precipitationProbability[i] &&
-        i >= hour
-      ) {
-        precipitationProbability =
-          weatherData.hourly.precipitationProbability[i];
-        maxHour = i;
-      }
-    }
-
-    const hourlyTemperatures = weatherData.hourly.time
-      .map((t, i) => ({
-        hour: t.getHours().toString().padStart(2, '0') + ':00',
-        temp: weatherData.hourly.temperature2m[i],
-      }))
-      .slice(0, 24);
-
-    let result: WeatherData = {
-      maxTemperatureToday: maxTemperature,
-      minTemperatureToday: minTemperature,
-      maxPrecipitationProbabilityToday: {
-        prob: precipitationProbability,
-        hour: maxHour,
-      },
-      visibilityNow: visibilityNow,
-      UVIndex: weatherData.daily.uvIndexMax[0],
-      apparentTemperature: weatherData.current.apparentTemperature,
-      precipitation: {
-        showers: weatherData.current.showers,
-        snowfall: weatherData.current.snowfall,
-        rain: weatherData.current.rain,
-      },
-      precipitationNow: weatherData.hourly.precipitationProbability[hour],
-
-      hourlyTemperatures: hourlyTemperatures,
-    };
-
-    return result;
-  }
+      return weatherData;
+    }),
+    catchError(error => {
+      console.error('Failed to fetch weather data:', error);
+      return throwError(() => error);
+    })
+  );
 }
+
+}
+
