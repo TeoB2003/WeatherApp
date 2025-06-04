@@ -97,7 +97,6 @@ export class CityContainerComponent {
   }
 
   favoriteCity(id: string): void {
-    console.log('📌 favoriteCity called with:', id);
     this.cityService.addFavoriteCity(id);
   }
 

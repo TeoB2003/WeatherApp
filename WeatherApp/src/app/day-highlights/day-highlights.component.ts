@@ -36,6 +36,32 @@ export class DayHighlightsComponent {
     domain: ['#3182ce'],
   };
 
+  isCelsius: boolean = true;
+
+  toggleUnit() {
+    this.isCelsius = !this.isCelsius;
+  }
+
+  setCelsius(isC: boolean) {
+    if (this.isCelsius !== isC) {
+      this.isCelsius = isC;
+      this.updateChartData();
+    }
+  }
+
+  updateChartData() {
+    if (!this.weatherData) return;
+    this.chartData = [
+      {
+        name: 'Temperature',
+        series: this.weatherData.hourlyTemperatures.map((d) => ({
+          name: d.hour,
+          value: this.isCelsius ? d.temp : (d.temp * 9/5) + 32,
+        })),
+      },
+    ];
+  }
+
   ngOnInit(): void {
     this.updateChartSize();
     window.addEventListener('resize', this.updateChartSize.bind(this));
@@ -52,16 +78,7 @@ export class DayHighlightsComponent {
     this.dataService.getWeatherByCity().subscribe({
       next: (data: WeatherData) => {
         this.weatherData = data;
-        console.log(data)
-        this.chartData = [
-          {
-            name: 'Temperature',
-            series: this.weatherData.hourlyTemperatures.map((d) => ({
-              name: d.hour,
-              value: d.temp,
-            })),
-          },
-        ];
+        this.updateChartData();
       },
       error: (err) => {
         console.error('Failed to fetch weather data:', err);
@@ -85,4 +102,8 @@ export class DayHighlightsComponent {
     const hour = parseInt(val.split(':')[0], 10);
     return hour % 3 === 0 ? val : '';
   };
+
+  yAxisLabel(): string {
+    return this.isCelsius ? 'Temp (°C)' : 'Temp (°F)';
+  }
 }

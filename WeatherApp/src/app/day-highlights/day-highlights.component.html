@@ -1,15 +1,22 @@
 <div class="all">
-  <div class="title">
-    <p style="color: #636363; font-size: 1.1em; font-weight: bold">
-      Today's highlight in {{ city }}
-    </p>
+  <div class="title-row">
+    <div class="title">
+      <p style="color: #636363; font-size: 1.1em; font-weight: bold; margin: 0;">
+        Today's highlight in {{ city }}
+      </p>
+    </div>
+    <div class="unit-toggle-switch">
+      <button pButton type="button" (click)="setCelsius(true)" [ngClass]="{'active': isCelsius}" class="unit-btn p-button-rounded p-button-outlined">°C</button>
+      <button pButton type="button" (click)="setCelsius(false)" [ngClass]="{'active': !isCelsius}" class="unit-btn p-button-rounded p-button-outlined">°F</button>
+    </div>
   </div>
   <div class="city-info">
     <div class="left">
       <div class="left-left-column">
         <div class="temperature">
           <app-apparent-temperature
-            [temperature]="weatherData.apparentTemperature"
+            [temperature]="isCelsius ? weatherData.apparentTemperature : (weatherData.apparentTemperature * 9/5) + 32"
+            [isCelsius]="isCelsius"
           ></app-apparent-temperature>
         </div>
 
@@ -40,8 +47,9 @@
           </div>
           <div class="right">
             <app-temperature
-              [maxT]="weatherData.maxTemperatureToday"
-              [minT]="weatherData.minTemperatureToday"
+              [maxT]="isCelsius ? weatherData.maxTemperatureToday : (weatherData.maxTemperatureToday * 9/5) + 32"
+              [minT]="isCelsius ? weatherData.minTemperatureToday : (weatherData.minTemperatureToday * 9/5) + 32"
+              [isCelsius]="isCelsius"
             ></app-temperature>
           </div>
         </div>
@@ -58,7 +66,7 @@
         [showXAxisLabel]="true"
         [showYAxisLabel]="true"
         [xAxisLabel]="'Hour'"
-        [yAxisLabel]="'Temp (°C)'"
+        [yAxisLabel]="yAxisLabel()"
       >
       </ngx-charts-line-chart>
     </div>

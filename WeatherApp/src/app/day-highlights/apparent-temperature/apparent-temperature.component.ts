@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component,input } from '@angular/core';
-import { CardModule } from 'primeng/card'; 
+import { Component, Input, input } from '@angular/core';
+import { CardModule } from 'primeng/card';
 @Component({
   selector: 'app-apparent-temperature',
   imports: [CardModule, CommonModule],
@@ -9,4 +9,5 @@ import { CardModule } from 'primeng/card';
 })
 export class ApparentTemperatureComponent {
   temperature=input(0)
+  @Input() isCelsius: boolean = true;
 }
