@@ -138,10 +138,10 @@ $left: 45%;
     margin-top: 1%;
     margin: 0;
     width: 90vw;
-    margin-left: 5vw;
+    margin-left: 3.5vw;
     margin-right: 5vh;
     height: auto;
-  }
+  } 
   .city-info {
     flex-direction: column;
   }
@@ -180,5 +180,14 @@ $left: 45%;
     .left {
       width: 100%;
     }
+  }
+
+  .other{
+   .left{
+    width: 40%;
+  } 
+  .right{
+    width: 58%;
+  }
   }
 }

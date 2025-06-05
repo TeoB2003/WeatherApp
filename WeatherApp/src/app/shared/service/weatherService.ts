@@ -36,7 +36,6 @@ export class WeatherService {
 
   private citySubject = new BehaviorSubject<City>(this.currentCity);
 
-  // Expose the observable part of the BehaviorSubject
   currentCity$ = this.citySubject.asObservable();
   changeCity(newCity: City) {
     this.currentCity = newCity;
@@ -58,7 +57,7 @@ getWeatherByCity(): Observable<WeatherData> {
       'showers',
       'snowfall',
     ].join(','),
-    current: ['apparent_temperature', 'rain', 'showers', 'snowfall'].join(','),
+    current: ['apparent_temperature', 'rain', 'showers', 'snowfall', 'visibility'].join(','),
     timezone: 'auto',
   });
 
@@ -68,13 +67,11 @@ getWeatherByCity(): Observable<WeatherData> {
       const hourly = response.hourly;
       const daily = response.daily;
 
-      // Datele sunt în format text ISO deja (ex: "2025-06-03T14:00")
       const hourlyTimes: Date[] = hourly.time.map((t: string) => new Date(t));
 
       const temperatureArray = hourly.temperature_2m;
       const precipitationProbabilityArray = hourly.precipitation_probability;
 
-      // Primele 24 de ore
       const first24 = precipitationProbabilityArray.slice(0, 24);
       const maxProb = Math.max(...first24);
       const maxHourIndex = first24.indexOf(maxProb);
@@ -100,7 +97,6 @@ getWeatherByCity(): Observable<WeatherData> {
           temp,
         })),
       };
-
       return weatherData;
     }),
     catchError(error => {

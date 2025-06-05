@@ -116,25 +116,19 @@
     display: flex;
     flex-direction: row;
     height: 100%;
-    max-width: 95vw;
+    max-width: 100vw;
     margin: 0;
+    padding: 0;
     border-radius: 0;
-    padding-left: 0;
-    padding-right: 0;
     align-items: center;
 
     .top-section
     {
-      padding-left: 1%;
-      padding-right: 1%;
-      margin: 0;
-      padding: 0;
-      width: 98%;
-      height: 170%;
+      width: 100vw;
+      height: 100%;
       display: flex;
       flex-direction: row;
       gap: 0;
-      justify-content: space-between;
     }
 
     .bottom-section {
@@ -147,7 +141,11 @@
       display: none;
     }
     .menu-btn {
+       
+       width: 8%;
        display: inline;
+       height: 65%;
+       margin-left: 5%;
     }
   }
 }

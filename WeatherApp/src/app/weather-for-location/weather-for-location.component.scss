@@ -72,13 +72,14 @@ $top-right-height: 45%;
     .all-items{
       flex-direction: column;
       min-height: 100vh;
+      overflow-y: auto;
       margin: 0;
       width: 100%;
       padding: 0;
     }
 
     .left{
-      height: 10vh;
+      height: 8vh;
       width: 100%;
     }
 
@@ -91,7 +92,7 @@ $top-right-height: 45%;
 
     .top{
       margin: 0;
-      height: 20%;
+      height: 40vh;
       width: 100%;
       background-color: aqua;
     }
@@ -100,6 +101,5 @@ $top-right-height: 45%;
       margin: 0;
       height: auto;
       width: 100%;
-      background-color: brown;
     }
   }

@@ -78,6 +78,7 @@ export class DayHighlightsComponent {
     this.dataService.getWeatherByCity().subscribe({
       next: (data: WeatherData) => {
         this.weatherData = data;
+        console.log(this.weatherData.visibilityNow)
         this.updateChartData();
       },
       error: (err) => {
