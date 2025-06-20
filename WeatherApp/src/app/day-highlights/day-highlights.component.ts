@@ -8,6 +8,7 @@ import { VisibilityComponent } from './visibility/visibility.component';
 import { UvComponent } from './uv/uv.component';
 import { PrecipitationsComponent } from './precipitations/precipitations.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { curveNatural } from 'd3-shape';
 
 @Component({
   selector: 'app-day-highlights',
@@ -37,7 +38,7 @@ export class DayHighlightsComponent {
   };
 
   isCelsius: boolean = true;
-
+  curve = curveNatural
   toggleUnit() {
     this.isCelsius = !this.isCelsius;
   }
@@ -51,15 +52,21 @@ export class DayHighlightsComponent {
 
   updateChartData() {
     if (!this.weatherData) return;
+
     this.chartData = [
       {
         name: 'Temperature',
-        series: this.weatherData.hourlyTemperatures.map((d) => ({
-          name: d.hour,
-          value: this.isCelsius ? d.temp : (d.temp * 9/5) + 32,
-        })),
+        series: this.weatherData.hourlyTemperatures
+          .slice(0, 24) // iei doar primele 24 de elemente
+          .map((d) => ({
+            name: d.hour,
+            value: this.isCelsius ? d.temp : (d.temp * 9 / 5) + 32,
+          })),
       },
     ];
+
+    console.log(this.chartData);
+
   }
 
   ngOnInit(): void {

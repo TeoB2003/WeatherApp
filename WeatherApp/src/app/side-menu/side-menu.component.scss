@@ -1,6 +1,43 @@
-.all{
-    background-color: gray;
-    margin: 0;
-    height: 100vh;
-    width: 100vw;
+@import "primeflex/primeflex.scss";
+.all {
+    position: fixed; 
+    top: 0;
+    left: 0;
+    background-color: #ffffff; 
+    height: 100vh; 
+    width: 100%; 
+    z-index: 1000; 
+    padding: 20px; 
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1); 
+    display: flex;
+    flex-direction: column; 
+    gap: 20px; 
+
+    .menu-section{
+        display: flex;
+        flex-direction: column;
+        width: 70%;
+        margin-left: 15%;
+        height: 100%;
+        justify-content: space-between;
+    }
+    button{
+        background-color: #efefef;
+        height: 20%;
+    }
+    button:hover{
+        background-color: #c3c1c1;
+    }
+    .close-btn{
+        color: white;
+        background-color: red;
+        position: relative;
+        top: 0%;
+        left: 2%;
+        width: 10%;
+        height: 5%;
+    }
+    .close-btn:hover{
+        background-color: rgb(179, 3, 3);
+    }
 }

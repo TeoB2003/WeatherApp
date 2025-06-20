@@ -1,5 +1,19 @@
 <div class="all">
-<button (click)="emitClose()">Close</button>
-<p>side-menu works!</p>
-</div>
+    <button class="close-btn" (click)="emitClose()">X</button>
 
+    <div class="menu-section">
+        <button class="home">
+            <span class="material-icons text-orange-500">home</span>
+            <span class="text-orange-500 text-lg font-medium">Home</span>
+        </button>
+        <button class="hello-user-btn" (click)="goToLogin()">
+            <span class="material-icons">person</span>
+            <span>Hello, {{ username }}</span>
+        </button>
+
+        <button class="logout-btn" (click)="logout()">
+            <span class="material-icons">logout</span>
+            <span>Logout</span>
+        </button>
+    </div>
+</div>
