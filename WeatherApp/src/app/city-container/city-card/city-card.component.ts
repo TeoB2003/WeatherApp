@@ -14,6 +14,7 @@ export class CityCardComponent {
   @Input() city!: CityCard;
   @Output() remove = new EventEmitter<string>();
   @Output() favorite = new EventEmitter<string>();
+  @Output() select = new EventEmitter<CityCard>();
 
   weatherService = inject(WeatherService)
   router = inject(Router)
@@ -30,5 +31,12 @@ export class CityCardComponent {
     let newCity: City = { name: this.city.name, lat: this.city.lat, lng: this.city.lng }
     this.weatherService.changeCity(newCity)
     this.router.navigate(['/weather', this.city.name]);
+  }
+
+  onCardClick(event: MouseEvent) {
+    if ((event.target as HTMLElement).classList.contains('favorite-btn')) {
+      return;
+    }
+    this.select.emit(this.city);
   }
 }

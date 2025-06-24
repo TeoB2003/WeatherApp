@@ -53,24 +53,29 @@ export class CityService {
         const ref = doc(this.firestore, `users/${uid}/favorites/${id}`);
 
         if (updatedCity.favorite) {
-          console.log('⭐ Adding to favorites:', updatedCity.name);
-          setDoc(ref, updatedCity)
-            .then(() => console.log('✅ Added'))
-            .catch((err) => console.error('❌ Error adding:', err));
+          return setDoc(ref, updatedCity)
+            .then(() => {
+              return updatedCity;
+            })
+            .catch((err) => {
+              console.error('❌ Error adding:', err);
+              return city;
+            });
         } else {
-          console.log('🗑️ Removing from favorites:', updatedCity.name);
-          deleteDoc(ref)
-            .then(() => console.log('✅ Removed'))
-            .catch((err) => console.error('❌ Error removing:', err));
+          return deleteDoc(ref)
+            .then(() => {
+              return updatedCity;
+            })
+            .catch((err) => {
+              console.error('❌ Error removing:', err);
+              return city;
+            });
         }
-
-        return updatedCity;
       }
-
-      return city;
+      return Promise.resolve(city);
     });
-
-    this.citiesSubject.next(updatedCities);
+    const resolvedCities = await Promise.all(updatedCities);
+    this.citiesSubject.next([...resolvedCities]);
   }
 
   removeFavoriteCity(id: string): void {

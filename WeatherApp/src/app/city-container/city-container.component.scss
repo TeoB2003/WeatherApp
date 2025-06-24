@@ -43,6 +43,10 @@
   margin: 0;
   max-width: 100%;
   padding: 0 0 0 0;
+
+  &.two-items .p-carousel-items-content {
+    gap: 1rem !important;
+  }
 }
 
 .carousel-container {

@@ -6,6 +6,8 @@ import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { CityCard } from './city-card.interface';
 import { CitySearchBarComponent } from './city-search-bar/city-search-bar.component';
+import { CarouselModule } from 'primeng/carousel';
+import { WeatherService } from '../shared/service/weatherService';
 
 @Component({
   selector: 'app-city-container',
@@ -14,6 +16,7 @@ import { CitySearchBarComponent } from './city-search-bar/city-search-bar.compon
     FormsModule,
     CommonModule,
     CitySearchBarComponent,
+    CarouselModule,
   ],
   templateUrl: './city-container.component.html',
   styleUrl: './city-container.component.scss',
@@ -28,22 +31,27 @@ export class CityContainerComponent {
   visibleItems = 3;
   maxIndex = 0;
 
-  constructor(private cityService: CityService) {}
+  constructor(
+    private cityService: CityService,
+    private weatherService: WeatherService
+  ) {}
 
   ngOnInit(): void {
     this.cityService.cities$.subscribe((cities) => {
-      this.cities = cities;
       if (this.currentCity) {
         this.currentCity =
           cities.find((c) => c.id === this.currentCity?.id) || null;
-      } else {
-        this.currentCity = cities.length > 0 ? cities[0] : null;
+      }
+      if (!this.currentCity) {
+        this.currentCity = cities.find((c) => c.favorite) || null;
       }
       if (this.currentCity) {
         this.cities = [
           this.currentCity,
-          ...cities.filter((c) => c.id !== this.currentCity!.id),
+          ...cities.filter((c) => c.id !== this.currentCity!.id && c.favorite),
         ];
+      } else {
+        this.cities = cities.filter((c) => c.favorite);
       }
       this.updateVisibleItems();
     });
@@ -96,12 +104,28 @@ export class CityContainerComponent {
     this.cityService.updateCity(index, updatedCity);
   }
 
-  favoriteCity(id: string): void {
-    this.cityService.addFavoriteCity(id);
+  async favoriteCity(id: string): Promise<void> {
+    await this.cityService.addFavoriteCity(id);
   }
 
   setCurrentCity(city: CityCard) {
     this.currentCity = city;
-    this.cities = [city, ...this.cities.filter((c) => c.id !== city.id)];
+    this.weatherService.changeCity({
+      name: city.name,
+      lat: city.lat,
+      lng: city.lng,
+    });
+    const allCities = this.cityService.getCities();
+    if (city.favorite) {
+      this.cities = [
+        city,
+        ...allCities.filter((c) => c.id !== city.id && c.favorite),
+      ];
+    } else {
+      this.cities = [
+        city,
+        ...allCities.filter((c) => c.id !== city.id && c.favorite),
+      ];
+    }
   }
 }
