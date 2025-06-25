@@ -83,7 +83,9 @@
 .menu-btn {
   display: none;
 }
-
+.logout-btn2 {
+  display: none;
+}
 .logout-btn {
   display: flex;
   align-items: center;
@@ -146,6 +148,15 @@
        display: inline;
        height: 65%;
        margin-left: 5%;
+    }
+
+    .logout-btn2 {
+       width: 8%;
+       display: inline;
+       margin-top: 1%;
+       height: 65%;
+       margin-left: 89%;
+       background-color: red;
     }
   }
 }
