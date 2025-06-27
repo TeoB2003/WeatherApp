@@ -6,10 +6,15 @@
         <span class="text-orange-500 text-lg font-medium">Home</span>
       </div>
     </div>
-    <button class="menu-btn">
+
+    <!-- <button class="menu-btn">
       <span class="material-icons" (click)="showMenu()">menu</span>
+    </button>-->
+    <button class="logout-btn2">
+      <span class="material-icons" (click)="logout()">logout</span>
     </button>
   </div>
+
   <div class="bottom-section">
     <button class="hello-user-btn" (click)="goToLogin()">
       <span class="material-icons">person</span>
@@ -22,7 +27,7 @@
     </button>
   </div>
 </div>
-  @if(showMenuv==true)
-  {
-    <app-side-menu (close)="closeMenu()"></app-side-menu>
-  }
+@if(showMenuv==true)
+{
+<app-side-menu (close)="closeMenu()"></app-side-menu>
+}
