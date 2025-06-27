@@ -2,7 +2,6 @@ import { Component, HostListener } from '@angular/core';
 import { CityCardComponent } from './city-card/city-card.component';
 import { CityService } from './city.service';
 import { FormsModule } from '@angular/forms';
-import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { CityCard } from './city-card.interface';
 import { CitySearchBarComponent } from './city-search-bar/city-search-bar.component';
@@ -24,11 +23,8 @@ import { WeatherService } from '../shared/service/weatherService';
 export class CityContainerComponent {
   cities: CityCard[] = [];
   currentCity: CityCard | null = null;
-  cities$: Observable<CityCard[]> | undefined;
-  newCity: string = '';
-
-  currentIndex = 0;
   visibleItems = 3;
+  currentIndex = 0;
   maxIndex = 0;
 
   constructor(
@@ -38,25 +34,18 @@ export class CityContainerComponent {
 
   ngOnInit(): void {
     this.cityService.cities$.subscribe((cities) => {
-      if (this.currentCity) {
-        this.currentCity =
-          cities.find((c) => c.id === this.currentCity?.id) || null;
-      }
-      if (!this.currentCity) {
-        this.currentCity = cities.find((c) => c.favorite) || null;
-      }
-      if (this.currentCity) {
-        this.cities = [
-          this.currentCity,
-          ...cities.filter((c) => c.id !== this.currentCity!.id && c.favorite),
-        ];
-      } else {
-        this.cities = cities.filter((c) => c.favorite);
-      }
+      this.currentCity =
+        this.currentCity && cities.some((c) => c.id === this.currentCity!.id)
+          ? cities.find((c) => c.id === this.currentCity!.id)!
+          : cities.find((c) => c.favorite) || null;
+      this.cities = this.currentCity
+        ? [this.currentCity, ...cities.filter((c) => c.id !== this.currentCity!.id && c.favorite)]
+        : cities.filter((c) => c.favorite);
       this.updateVisibleItems();
     });
     this.updateVisibleItems();
   }
+
   @HostListener('window:resize')
   onResize() {
     this.updateVisibleItems();
@@ -66,16 +55,7 @@ export class CityContainerComponent {
     const width = window.innerWidth;
     this.visibleItems =
       width >= 1280 ? 4 : width >= 1024 ? 3 : width >= 768 ? 2 : 1;
-    this.calculateMaxIndex();
-  }
-
-  calculateMaxIndex() {
     this.maxIndex = Math.max(0, this.cities.length - this.visibleItems);
-  }
-
-  get transformValue() {
-    const percentage = (100 / this.visibleItems) * this.currentIndex;
-    return `translateX(-${percentage}%)`;
   }
 
   prev() {
@@ -86,46 +66,20 @@ export class CityContainerComponent {
     this.currentIndex = Math.min(this.maxIndex, this.currentIndex + 1);
   }
 
-  removeCity(id: string): void {
+  removeCity(id: string) {
     this.cityService.removeCity(id);
-    this.cities$?.forEach((cities) => {
-      console.log(cities);
-    });
-    this.calculateMaxIndex();
+    this.maxIndex = Math.max(0, this.cities.length - this.visibleItems);
     this.currentIndex = Math.min(this.currentIndex, this.maxIndex);
   }
 
-  editCity(index: number, newName: string): void {
-    const cities = this.cityService.getCities();
-    const updatedCity = {
-      ...cities[index],
-      name: newName,
-    };
-    this.cityService.updateCity(index, updatedCity);
-  }
-
-  async favoriteCity(id: string): Promise<void> {
-    await this.cityService.addFavoriteCity(id);
+  async favoriteCity(id: string) {
+    await this.cityService.toggleFavorite(id);
   }
 
   setCurrentCity(city: CityCard) {
     this.currentCity = city;
-    this.weatherService.changeCity({
-      name: city.name,
-      lat: city.lat,
-      lng: city.lng,
-    });
-    const allCities = this.cityService.getCities();
-    if (city.favorite) {
-      this.cities = [
-        city,
-        ...allCities.filter((c) => c.id !== city.id && c.favorite),
-      ];
-    } else {
-      this.cities = [
-        city,
-        ...allCities.filter((c) => c.id !== city.id && c.favorite),
-      ];
-    }
+    this.weatherService.changeCity({ name: city.name, lat: city.lat, lng: city.lng });
+    const all = this.cityService.getCities();
+    this.cities = [city, ...all.filter((c) => c.id !== city.id && c.favorite)];
   }
 }
