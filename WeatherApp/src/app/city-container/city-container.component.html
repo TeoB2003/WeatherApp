@@ -5,6 +5,7 @@
 
   <div class="carousel-wrapper" [ngClass]="{'two-items': cities.length === 2}">
     <p-carousel
+      #carousel
       [value]="cities"
       [numVisible]="visibleItems"
       [numScroll]="1"

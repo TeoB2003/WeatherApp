@@ -26,20 +26,27 @@ export class WeatherService {
 
   private currentWeatherData: any = null;
 
-  http=inject(HttpClient);
+  http = inject(HttpClient);
 
-  currentCity = {
-    name: 'Bucharest',
-    lat: 44.439663,
-    lng: 26.096306,
-  };
+  currentCity: City;
+  private citySubject: BehaviorSubject<City>;
+  currentCity$: Observable<City>;
 
-  private citySubject = new BehaviorSubject<City>(this.currentCity);
+  constructor() {
+    const saved = localStorage.getItem('selectedCity');
+    this.currentCity = saved ? JSON.parse(saved) : {
+      name: 'Bucharest',
+      lat: 44.439663,
+      lng: 26.096306,
+    };
+    this.citySubject = new BehaviorSubject<City>(this.currentCity);
+    this.currentCity$ = this.citySubject.asObservable();
+  }
 
-  currentCity$ = this.citySubject.asObservable();
   changeCity(newCity: City) {
     this.currentCity = newCity;
     this.citySubject.next(newCity);
+    localStorage.setItem('selectedCity', JSON.stringify(newCity));
   }
 
 getWeatherByCity(): Observable<WeatherData> {
